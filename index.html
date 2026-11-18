@@ -159,6 +159,19 @@
   .sec-title{font-family:"Archivo",sans-serif; font-weight:900; font-size:clamp(24px,3.6vw,38px); letter-spacing:.04em; text-transform:uppercase; margin:0}
   .sec-tag{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.14em; color:var(--muted); margin-left:auto}
 
+  /* Weekly lines (rotating copy above Manifesto) */
+  .weekly-lines .lines-label{
+    font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:700; letter-spacing:.14em; color:var(--muted);
+    margin-bottom:14px;
+  }
+  .lines-list{list-style:none; margin:0; padding:0; border-top:3px solid var(--line)}
+  .lines-list li{padding:18px 2px; border-bottom:2px solid var(--line)}
+  .lines-list .l-en{
+    display:block; font-family:"Archivo",sans-serif; font-weight:900; text-transform:uppercase;
+    font-size:clamp(20px,3vw,30px); line-height:1.25; letter-spacing:.02em;
+  }
+  .lines-list .l-jp{display:block; margin-top:4px; font-size:15px; color:var(--muted)}
+
   /* Manifesto */
   .manifesto-lead{
     font-family:"Archivo",sans-serif; font-weight:900; text-transform:uppercase;
@@ -453,6 +466,26 @@
 </div>
 
 <main>
+
+  <!-- ============ WEEKLY LINES (週替わりコピー / 差し替え枠) ============ -->
+  <!-- 掲載中: コピーストック第2弾 2・3・4 (2026-11-19〜) -->
+  <section class="weekly-lines" id="weekly-lines">
+    <div class="lines-label">WEEKLY LINES — 週替わり</div>
+    <ul class="lines-list">
+      <li>
+        <span class="l-en">RECEIPTS AVAILABLE. TOTAL: ¥0.</span>
+        <span class="l-jp">領収書は発行できます。合計は¥0ですが。</span>
+      </li>
+      <li>
+        <span class="l-en">DUES: ¥0. LATE FEES: ALSO ¥0.</span>
+        <span class="l-jp">会費は¥0。滞納しても、¥0である。</span>
+      </li>
+      <li>
+        <span class="l-en">DAY 1, AGAIN.</span>
+        <span class="l-jp">今日も、1日目である。</span>
+      </li>
+    </ul>
+  </section>
 
   <!-- ============ 01 MANIFESTO ============ -->
   <section id="manifesto">
