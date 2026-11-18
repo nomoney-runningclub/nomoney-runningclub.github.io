@@ -292,6 +292,9 @@
   .sound-playlist-name{font-family:"Archivo",sans-serif; font-weight:900; text-transform:uppercase; font-size:clamp(20px,3vw,30px); line-height:1.15; letter-spacing:.02em}
   .sound-frame{border:3px solid var(--line); background:#000; max-width:1020px}
   .sound-frame iframe{display:block; width:100%; height:352px; border:0}
+.spotify-quiet{max-width:1280px;margin:0 auto;padding:6px 20px 36px}
+.spotify-quiet-label{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.16em;color:var(--muted);margin-bottom:8px}
+.spotify-quiet iframe{display:block;width:100%;border:0}
   .sound-caption{display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.12em; color:#a9a9a2; padding:10px 12px; background:#0d0d0d; border-top:2px solid #333}
   .sound-caption a{color:#f5f5f2; text-decoration:none; font-weight:700}
   .sound-caption a:hover{text-decoration:underline}
@@ -402,7 +405,6 @@
       <a href="#manifesto">01. MANIFESTO</a>
       <a href="#divisions">02. DIVISIONS</a>
       <a href="#gear">03. GEAR ARCHIVE</a>
-      <a href="#sound">SOUND</a>
       <a href="#contact">04. CONTACT</a>
     </nav>
     <div class="top-actions">
@@ -810,6 +812,7 @@
     </div>
   </section>
 
+  <!-- SOUNDセクション（チームミュージック）は当面非表示。復旧する場合はこのコメントを外す。
   <!-- ============ SOUND ============ -->
   <section id="sound">
     <div class="sec-head">
@@ -835,6 +838,7 @@
       </div>
     </div>
   </section>
+  -->
 
   <!-- ============ 04 CONTACT / JOIN ============ -->
   <section id="contact">
@@ -879,6 +883,12 @@
     </div>
   </section>
 </main>
+
+<!-- Spotifyプレイヤー：SOUNDセクション非表示に伴い、フッター直前に目立たない形で配置 -->
+<div class="spotify-quiet">
+  <div class="spotify-quiet-label">PLAYLIST — SPOTIFY</div>
+  <iframe src="https://open.spotify.com/embed/playlist/3887MDb3kNZVjKp2g95Eeb?utm_source=generator&theme=0" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="&quot;SHARE&quot; RUNNING MUSIC — Spotifyプレイリスト"></iframe>
+</div>
 
 <footer>
   <div class="foot-in">
