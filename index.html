@@ -239,6 +239,14 @@
   .rules-box li:first-child{border-top:none; padding-top:2px}
   .rules-box li b{display:block; font-size:14px}
   .rules-box li span{color:var(--muted)}
+  .rules-inv{background:var(--inv-bg); color:var(--inv-ink); font-weight:700; margin-top:64px; padding:30px 28px 28px}
+  .rules-inv .sec-head{border-bottom-color:var(--inv-ink)}
+  .rules-inv .sec-tag{color:var(--inv-muted)}
+  .rules-inv .rules-box{border-color:var(--inv-ink); background:transparent}
+  .rules-inv .rules-box .sub{color:var(--inv-muted)}
+  .rules-inv .rules-box li{border-top-color:var(--inv-muted)}
+  .rules-inv .rules-box li span{color:var(--inv-muted)}
+  .rules-inv .log-format{border:2px solid var(--inv-ink)}
   .log-format{
     margin-top:20px; background:var(--inv-bg); color:var(--inv-ink);
     font-family:"IBM Plex Mono",monospace; font-size:13px; padding:16px 20px; overflow-x:auto; white-space:nowrap;
@@ -661,19 +669,35 @@
       世界各地のメンバーが、それぞれの街で、同じ時刻・同じ条件で走る同期型セッション。
       全セッション共通の鉄則：<strong style="color:var(--ink)">無銭は無謀ではない——水・補給・帰宅手段を持ち、悪天候時は中止も苦行のうち。</strong>
     </p>
+    <p style="max-width:720px; color:var(--muted); margin:0 0 22px">セッションの内容と日時は頻繁に変わります。時折、見に来てください。</p>
     <div class="session-list">
+      <!-- 当面非表示（ストック）：復帰時はこのコメントを外す
       <div class="session"><span class="name">DAY ZERO — LAUNCH RUN</span><span class="when">ローンチ当日 21:00〜 / 24H</span><p>ローンチを記念する、最初の点呼。ローンチから24時間以内に各自の街で、距離は自由に走り、タイトルを「DAY ZERO | 都市 | 距離」で投稿する。第1回の点呼が、そのまま最初のメンバー名簿になる。</p></div>
+      -->
       <div class="session"><span class="name">Asphalt Night Shift</span><span class="when">毎週月曜 20:00〜</span><p>静まり返った都市を駆け抜ける定例ソロラン。昼間とは違う表情の街を切り開く。</p></div>
       <div class="session"><span class="name">Midnight Solitary Run</span><span class="when">毎月最終水曜 21:00〜</span><p>同じ時刻、それぞれの街のアスファルトへ。孤独でありながら世界と同期する1時間。</p></div>
+      <!-- 当面非表示（ストック）：復帰時はこのコメントを外す
       <div class="session"><span class="name">Sufferfest Mileage Week</span><span class="when">毎月第3週</span><p>生活の隙間を縫い、無理のない範囲でどこまで距離を積めるか。自らに静かな課題を課す1週間。</p></div>
+      -->
+      <!-- 当面非表示（ストック）：復帰時はこのコメントを外す
       <div class="session"><span class="name">Zero Yen LSD</span><span class="when">隔週日曜 早朝 5:00〜</span><p>高額な補給グッズに頼らない長距離走。水と脚を頼りに——ただし補給と帰宅手段の確保は絶対条件。</p></div>
+      -->
+      <!-- 当面非表示（ストック）：復帰時はこのコメントを外す
       <div class="session"><span class="name">Solo Track Repeat</span><span class="when">毎月初日</span><p>同じ1kmの直線をひたすら往復する。景色の変化に頼らない、精神の整地。</p></div>
+      -->
+      <!-- 当面非表示（ストック）：復帰時はこのコメントを外す
       <div class="session"><span class="name">Worldwide Synchronized 10K</span><span class="when">四半期に1回</span><p>時差を超え、24時間以内に世界各地で10km。Stravaのマップ上に無銭の点を打ち込む旗艦企画。</p></div>
+      -->
+      <!-- 当面非表示（ストック）：復帰時はこのコメントを外す
       <div class="session"><span class="name">Freezing &amp; Rain Attack</span><span class="when">悪天候時 ゲリラ開催</span><p>雨と寒さを微笑んで引き受ける。ただし雷・積雪・警報級の天候では即中止。それも判断の苦行。</p></div>
+      -->
+      <!-- 当面非表示（ストック）：復帰時はこのコメントを外す
       <div class="session"><span class="name">Year-End Mileage Purge</span><span class="when">12月25日〜31日</span><p>消費主義の喧騒をよそ目に、ただ距離だけを貪り、1年を純化させる年末集中期間。</p></div>
+      -->
     </div>
 
-    <div class="sec-head" style="margin-top:64px">
+    <div class="rules-inv">
+    <div class="sec-head">
       <span class="sec-num" style="font-size:clamp(24px,3.4vw,36px)">▸</span>
       <h3 class="sec-title" style="font-size:clamp(20px,3vw,30px)">Rules of Engagement</h3>
       <span class="sec-tag">守るルールと、推奨する様式は、別である。</span>
@@ -704,6 +728,7 @@
     </div>
     <div class="log-format" aria-label="推奨ログ命名フォーマット">
       <span class="dim">LOGGING FORMAT (RECOMMENDED):</span>&nbsp; KM-01 | Night Run - Sendai / Asphalt / 15.0km
+    </div>
     </div>
   </section>
 
