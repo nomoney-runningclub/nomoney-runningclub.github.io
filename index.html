@@ -342,6 +342,19 @@
   .news-done{font-family:"IBM Plex Mono",monospace; font-weight:700; font-size:14px; letter-spacing:.08em; border:3px solid var(--line); padding:12px 14px; text-align:center}
   .privacy-note{font-size:11px; color:var(--muted); margin-top:10px}
 
+  /* Magazine — "FREE" PAPER archive */
+  .mag-lead{max-width:720px; color:var(--muted); margin:0 0 30px; font-size:15px}
+  .mag-row{display:flex; flex-wrap:wrap; gap:34px; justify-content:space-evenly; max-width:1020px; margin:0 auto}
+  .mag-item{margin:0; width:210px}
+  .mag-item a{display:block; border:2px solid var(--line); background:#000}
+  .mag-item img{width:100%; height:auto; transition:filter .18s ease}
+  .mag-item a:hover img{filter:brightness(1.13)}
+  .mag-item figcaption{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.12em; color:var(--muted); text-align:center; margin-top:10px}
+  .mag-weblink{margin:36px 0 0; text-align:center; font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:700; letter-spacing:.12em}
+  .mag-weblink a{text-decoration:none; border-bottom:2px solid var(--line); padding-bottom:3px}
+  .mag-weblink a:hover{opacity:.72}
+  @media (max-width:640px){ .mag-item{width:min(210px,74vw)} }
+
   /* Footer */
   footer{margin-top:80px; background:#060606; color:#f5f5f2; border-top:3px solid #060606}
   .foot-in{max-width:1280px; margin:0 auto; padding:48px 20px 30px}
@@ -915,6 +928,38 @@
         </div>
       </div>
     </div>
+  </section>
+
+  <!-- ============ 06 MAGAZINE — "FREE" PAPER ARCHIVE ============ -->
+  <section id="magazine">
+    <div class="sec-head">
+      <span class="sec-num">06</span>
+      <h2 class="sec-title">"Free" Paper Archive</h2>
+      <span class="sec-tag">WEBマガジン — バックナンバー</span>
+    </div>
+    <p class="mag-lead">月刊WEBマガジン「"FREE" PAPER」のバックナンバー。表紙を押すと、その号をPDFで読める。</p>
+    <div class="mag-row">
+      <figure class="mag-item">
+        <a href="magazine/FREE-PAPER-vol001.pdf" target="_blank" rel="noopener">
+          <img src="assets/magazine/vol001-cover.jpg" alt="&quot;FREE&quot; PAPER Vol.001 の表紙 — 創刊 DAY ZERO、光るシルエットの列" loading="lazy" />
+        </a>
+        <figcaption>Vol.001 — 2025.11.25</figcaption>
+      </figure>
+      <figure class="mag-item">
+        <a href="magazine/FREE-PAPER-vol002.pdf" target="_blank" rel="noopener">
+          <img src="assets/magazine/vol002-cover.jpg" alt="&quot;FREE&quot; PAPER Vol.002 の表紙 — 冬・凍結、雪の木立" loading="lazy" />
+        </a>
+        <figcaption>Vol.002 — 2025.12.25</figcaption>
+      </figure>
+      <figure class="mag-item">
+        <a href="magazine/FREE-PAPER-vol003.pdf" target="_blank" rel="noopener">
+          <img src="assets/magazine/vol003-cover.jpg" alt="&quot;FREE&quot; PAPER Vol.003 の表紙 — 留学生、開いた両手のひら" loading="lazy" />
+        </a>
+        <figcaption>Vol.003 — 2026.01.25</figcaption>
+      </figure>
+    </div>
+    <!-- TODO: 「WEBマガジンで読む」のリンク先は仮置き。WEBマガジン（Muse artifact「free-paper」）は未共有で公開URLがまだ無いため、共有で公開URLが発行され次第、この href をそのURLに差し替える。 -->
+    <p class="mag-weblink"><a href="#magazine">WEBマガジンで読む →</a></p>
   </section>
 </main>
 
