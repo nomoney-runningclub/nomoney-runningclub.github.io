@@ -111,23 +111,26 @@
 
   /* ---------- Top bar ---------- */
   header.topbar{
-    position:sticky; top:0; z-index:100;
     background:var(--bg); border-bottom:3px solid var(--line);
   }
   .topbar-in{
     max-width:1280px; margin:0 auto; padding:10px 20px;
     display:flex; align-items:center; gap:18px; flex-wrap:wrap;
   }
-  .brand{display:flex; align-items:center; gap:10px; text-decoration:none; margin-right:auto}
+  .brand{display:flex; align-items:center; gap:10px; row-gap:2px; flex-wrap:wrap; text-decoration:none; margin-right:auto; min-width:0}
   .brand-mark{width:38px; height:38px; object-fit:cover; border:2px solid var(--line); flex:none}
   .brand .yen{font-family:"Archivo",sans-serif; font-weight:900; font-size:30px; line-height:1; letter-spacing:-.02em}
   .brand .jp{font-weight:900; font-size:20px; letter-spacing:.14em}
   .brand .en-sub{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.12em; color:var(--muted)}
   .brand .club-name{font-family:"Archivo",sans-serif; font-weight:900; font-size:24px; line-height:1; letter-spacing:.05em; white-space:nowrap}
-  nav.main{display:flex; gap:4px; flex-wrap:wrap}
+  nav.main{display:flex; gap:2px; flex-wrap:wrap; align-items:center}
+  .menu-label{
+    font-family:"IBM Plex Mono",monospace; font-size:10px; font-weight:700; letter-spacing:.16em; line-height:1.4;
+    border:2px solid var(--line); padding:4px 8px; margin-right:6px;
+  }
   nav.main a{
-    font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:700; letter-spacing:.08em;
-    text-decoration:none; padding:8px 10px; border:2px solid transparent;
+    font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:700; letter-spacing:.06em; line-height:1.5;
+    text-decoration:none; padding:5px 8px; border:2px solid transparent;
   }
   nav.main a:hover{border-color:var(--line)}
   .top-actions{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
@@ -195,6 +198,8 @@
   .kv-head .sec-num{color:#f5f5f2}
   .kv-head .sec-title{color:#f5f5f2}
   .kv-head .sec-tag{color:#a9a9a2}
+  .heritage-logo{margin:0 0 26px; max-width:400px; border:3px solid #f5f5f2; background:#000}
+  .heritage-logo img{width:100%; height:auto}
   .kv-frame{border:3px solid #f5f5f2; background:#000; margin:0 auto; max-width:1020px}
   .kv-frame img{width:100%; height:auto}
   .kv-caption{display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.12em; color:#a9a9a2; padding:10px 12px; background:#0d0d0d; border-top:2px solid #333}
@@ -388,10 +393,9 @@
   .join-main h3{font-family:"Archivo",sans-serif; font-weight:900; font-size:clamp(24px,3.4vw,36px); line-height:1.2; margin:0 0 14px; text-transform:uppercase}
   .join-main p{margin:0 0 14px; font-size:15px; opacity:.88}
   .join-main .steps{margin:18px 0 0; padding:0; list-style:none; counter-reset:st}
-  .join-main .steps li{counter-increment:st; padding:10px 0 10px 44px; position:relative; border-top:1px solid rgba(128,128,120,.4); font-size:14px}
+  .join-main .steps li{padding:10px 0 10px 32px; position:relative; border-top:1px solid rgba(128,128,120,.4); font-size:14px}
   .join-main .steps li::before{
-    content:"0" counter(st); position:absolute; left:0; top:10px;
-    font-family:"IBM Plex Mono",monospace; font-weight:700; font-size:13px;
+    content:"⚫︎"; position:absolute; left:0; top:15px; font-size:10px; line-height:1;
   }
   .join-side{display:flex; flex-direction:column; gap:20px}
   .base-box{border:3px solid var(--line); padding:22px; background:var(--panel)}
@@ -417,7 +421,6 @@
   .join-club-link a{text-decoration:none; border-bottom:2px solid currentColor; padding-bottom:3px}
   .join-club-link a:hover{opacity:.72}
   .join-points{list-style:none; margin:24px 0 0; padding:18px 0 0; border-top:1px solid rgba(128,128,120,.4); font-family:"Archivo",sans-serif; font-weight:900; text-transform:uppercase; font-size:clamp(19px,2.6vw,26px); line-height:1.5}
-  .join-points li::before{content:"⚫︎"; margin-right:12px; font-size:.6em; vertical-align:.3em}
   @media (max-width:640px){ .mag-item{width:min(210px,74vw)} }
 
   /* Footer */
@@ -478,9 +481,19 @@
     .session{grid-template-columns:1fr; gap:4px}
     .gear-grid{grid-template-columns:1fr}
     .brand .en-sub{display:none}
+    .brand .yen{font-size:26px}
+    .brand .jp{font-size:18px}
+    .brand .club-name{font-size:20px}
+    .coord-line{flex-wrap:wrap; white-space:normal; font-size:16px; gap:6px 14px}
     .log-format{white-space:normal; overflow-x:visible; line-height:1.9}
     nav.main{order:3; width:100%}
     .topbar-in{gap:10px}
+  }
+  @media (max-width:480px){
+    .brand .yen{font-size:24px}
+    .brand .jp{font-size:17px}
+    .brand .club-name{font-size:18px; letter-spacing:.02em}
+    .coord-line{font-size:15px}
   }
 </style>
 </head>
@@ -490,9 +503,11 @@
   <div class="topbar-in">
     <a class="brand" href="#top" aria-label="NO MONEY RUNNING CLUB トップ">
       <span class="yen">¥0</span>
+      <span class="jp">苦行無銭</span>
       <span class="club-name">NO MONEY RUNNING CLUB</span>
     </a>
     <nav class="main" aria-label="メインナビゲーション">
+      <span class="menu-label" aria-hidden="true">MENU</span>
       <a href="#manifesto">01. MANIFESTO</a>
       <a href="#divisions">02. DIVISIONS</a>
       <a href="#gear">03. GEAR ARCHIVE</a>
@@ -506,8 +521,6 @@
         <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
       </div>
       <button class="crt-toggle" id="crtToggle" type="button" aria-pressed="true">CRT: ON</button>
-      <a class="btn ghost" href="#contact">JOIN</a>
-      <a class="btn" href="#gear">GEAR</a>
     </div>
   </div>
 </header>
@@ -936,6 +949,9 @@
       <h3 class="sec-title" style="font-size:clamp(20px,3vw,30px)">Heritage — Emblem Archive</h3>
       <span class="sec-tag" style="color:#a9a9a2">チームロゴ/ THE FALLING MAN</span>
     </div>
+    <figure class="heritage-logo">
+      <img src="assets/logo-full.jpg" alt="苦行無銭のチームロゴ：黒背景に白文字「KUGYOU No Money」、転倒する人物の白いシルエット、下部に kugyou.org" />
+    </figure>
     <p style="max-width:720px; color:#d8d8d2; margin:0 0 26px">
       <span class="tx-jp">英雄のポーズではない。転倒し地面に落下する人のシルエット。それが苦行無銭の原点を表すものである。</span>
       <span class="tx-en">Not a hero's pose. The silhouette of a person tripping and falling to the ground. That is what represents the origin of Kugyou Musen.</span>
