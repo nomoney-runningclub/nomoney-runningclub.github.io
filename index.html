@@ -248,7 +248,9 @@
   }
   .safety .mark{font-family:"Archivo",sans-serif; font-weight:900; font-size:22px; line-height:1.2; white-space:nowrap}
   .safety p{margin:0; font-size:15px}
-  .safety p + p{margin-top:6px; font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:.04em; opacity:.75}
+  .safety .tx-en{font-family:"IBM Plex Mono",monospace; letter-spacing:.04em; color:var(--inv-muted); margin-top:6px}
+  html[data-lang="en"] .safety .tx-en{font-family:inherit; letter-spacing:inherit}
+  html[data-lang="en"] .safety .tx-jp{color:var(--inv-muted)}
 
   .code-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:0; border:3px solid var(--inv-ink); background:var(--inv-bg); color:var(--inv-ink); margin-top:40px}
   .code-item{padding:20px 22px; border-bottom:2px solid var(--inv-ink)}
@@ -559,8 +561,8 @@
         <div class="safety">
           <div class="mark">¥0 ≠<br>無謀</div>
           <div>
-            <p><strong>トレーニングにあたり、水・補給・帰宅手段は携える。苦行は自ら選ぶものであり、強要ではありません。</strong>歩くことも休息も中止もまた継続の一つの形です。</p>
-            <p>SUFFERING IS SELF-CHOSEN — NEVER FORCED ON OTHERS. ANY DISTANCE COUNTS. WALKING COUNTS. RESTING IS NOT QUITTING.</p>
+            <p><span class="tx-jp"><strong>トレーニングにあたり、水・補給・帰宅手段は携える。苦行は自ら選ぶものであり、強要ではありません。</strong>歩くことも休息も中止もまた継続の一つの形です。</span>
+            <span class="tx-en">SUFFERING IS SELF-CHOSEN — NEVER FORCED ON OTHERS. ANY DISTANCE COUNTS. WALKING COUNTS. RESTING IS NOT QUITTING.</span></p>
           </div>
         </div>
       </div>
