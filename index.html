@@ -344,6 +344,7 @@
   .gear-card .code{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.14em; color:var(--muted)}
   .gear-card h3{font-family:"Archivo",sans-serif; font-weight:900; font-size:22px; margin:4px 0 6px}
   .gear-card p{margin:0 0 18px; font-size:14px; color:var(--muted)}
+  .gear-card .gear-img-note{font-size:12px; line-height:1.7; margin:0 0 16px}
   .gear-foot{margin-top:auto; display:flex; align-items:center; gap:14px; flex-wrap:wrap}
   .gear-price{font-family:"Archivo",sans-serif; font-weight:900; font-size:24px}
   .gear-price small{font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:500; color:var(--muted)}
@@ -385,15 +386,6 @@
   .base-box .base span{font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:500; color:var(--muted)}
   .status-line{font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:700; letter-spacing:.1em; margin-top:12px}
   .status-line i{display:inline-block; width:9px; height:9px; background:var(--ink); border-radius:50%; margin-right:8px}
-  .newsletter{border:3px solid var(--line); padding:22px; background:var(--panel)}
-  .newsletter h4{margin:0 0 6px; font-family:"Archivo",sans-serif; font-weight:900; font-size:18px; letter-spacing:.03em}
-  .newsletter p{margin:0 0 14px; font-size:13px; color:var(--muted)}
-  .news-form{display:flex; gap:8px}
-  .news-form input{
-    flex:1; min-width:0; font-family:"IBM Plex Mono",monospace; font-size:13px; padding:11px 12px;
-    border:3px solid var(--line); background:var(--bg); color:var(--ink);
-  }
-  .news-done{font-family:"IBM Plex Mono",monospace; font-weight:700; font-size:14px; letter-spacing:.08em; border:3px solid var(--line); padding:12px 14px; text-align:center}
   .privacy-note{font-size:11px; color:var(--muted); margin-top:10px}
 
   /* Magazine — "FREE" PAPER archive */
@@ -404,9 +396,7 @@
   .mag-item img{width:100%; height:auto; transition:filter .18s ease}
   .mag-item a:hover img{filter:brightness(1.13)}
   .mag-item figcaption{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.12em; color:var(--muted); text-align:center; margin-top:10px}
-  .mag-weblink{margin:36px 0 0; text-align:center; font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:700; letter-spacing:.12em}
-  .mag-weblink a{text-decoration:none; border-bottom:2px solid var(--line); padding-bottom:3px}
-  .mag-weblink a:hover{opacity:.72}
+  .mag-note{max-width:720px; font-size:11px; line-height:1.7; color:var(--muted); margin:30px 0 0}
   .join-club-link{margin:22px 0 0; font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:700; letter-spacing:.12em}
   .join-club-link a{text-decoration:none; border-bottom:2px solid currentColor; padding-bottom:3px}
   .join-club-link a:hover{opacity:.72}
@@ -843,6 +833,7 @@
     <div class="gear-grid" style="grid-template-columns:1fr">
       <article class="gear-card">
         <img src="assets/wear-tee-black.jpg" alt="打ちっぱなしのコンクリート壁に前後を並べて掛けた黒のドライTシャツの写真（イメージ）：前面に JOGGING JUNKIE、背面に ANTI CLIMAX のプリント" />
+        <p class="gear-img-note"><span class="tx-jp">写真はイメージです。実物の記録写真への差し替えを進めています。</span><span class="tx-en">Photo is an image. Archival photos of the actual pieces are in preparation.</span></p>
         <div class="code">WEAR-01 // DRY TEE — BLACK</div>
         <h3>JOGGING JUNKIE TEE</h3>
         <div class="gear-spec">
@@ -957,15 +948,6 @@
           <div class="base">BASE 03: YOUR CITY <span>WORLDWIDE / WHEREVER YOU RUN</span></div>
           <div class="status-line"><i></i>STATUS: OPERATIONAL 24/7</div>
         </div>
-        <div class="newsletter" id="newsletterBox">
-          <h4>// NOISELETTER SUBSCRIPTION</h4>
-          <p>No spam. Only secret meetups and gear drops. <span class="tx-jp">登録は任意。アドレスは配信目的以外に使いません。</span><span class="tx-en">Subscription is optional. Your address will be used for delivery purposes only.</span></p>
-          <form class="news-form" id="newsForm">
-            <label class="mono" for="newsEmail" style="position:absolute; left:-9999px">メールアドレス</label>
-            <input id="newsEmail" type="email" required placeholder="your@email" autocomplete="email" />
-            <button class="btn" type="submit">SUBSCRIBE TO NOISE</button>
-          </form>
-        </div>
       </div>
     </div>
   </section>
@@ -998,8 +980,7 @@
         <figcaption>Vol.003 — 2026.01.25</figcaption>
       </figure>
     </div>
-    <!-- TODO: 「WEBマガジンで読む」のリンク先は仮置き。WEBマガジン（Muse artifact「free-paper」）は未共有で公開URLがまだ無いため、共有で公開URLが発行され次第、この href をそのURLに差し替える。 -->
-    <p class="mag-weblink"><a class="h-jp" href="#magazine">WEBマガジンで読む →</a><span class="h-en">READ THE WEB MAGAZINE</span></p>
+    <p class="mag-note"><span class="tx-jp">本サイトおよび『"FREE" PAPER』の日付は、創刊を2025年11月に置く編集上の紀年による。記録の内容は、各号・各記事の制作時点のものである。</span><span class="tx-en">Dates on this site and in "FREE" PAPER follow an editorial calendar that places the founding in November 2025. Each record reflects the time of its making.</span></p>
   </section>
 </main>
 
@@ -1074,17 +1055,6 @@
   });
   document.querySelectorAll('[data-goto-filter]').forEach(function(a){
     a.addEventListener('click', function(){ setFilter(a.getAttribute('data-goto-filter')); });
-  });
-
-  /* Newsletter */
-  var newsForm = document.getElementById('newsForm');
-  newsForm.addEventListener('submit', function(e){
-    e.preventDefault();
-    var box = document.getElementById('newsletterBox');
-    var done = document.createElement('div');
-    done.className = 'news-done';
-    done.textContent = 'SUBSCRIBED TO THE NOISE.';
-    newsForm.replaceWith(done);
   });
 
   /* Language switch (initial mode was set by the inline script in <head>) */
