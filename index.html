@@ -71,6 +71,7 @@
     background:none; color:var(--muted); border:none; padding:7px 9px; cursor:pointer;
   }
   .lang-switch button[aria-pressed="true"]{background:var(--ink); color:var(--bg)}
+  html[data-lang="jp"] .en-only{display:none}
   /* EN mode: mirror of the JP layout — EN becomes the primary text,
      JP drops below it in the same subordinate style .tx-en has in JP mode. */
   html[data-lang="en"] :is(p,li):has(> .tx-en){display:flex; flex-direction:column}
@@ -303,6 +304,7 @@
   .session .name{font-family:"Archivo",sans-serif; font-weight:900; font-size:16px; letter-spacing:.02em}
   .session .when{font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:700; letter-spacing:.06em}
   .session p{margin:0; font-size:14px; color:var(--muted)}
+  .session-note{max-width:720px; font-size:13px; line-height:1.7; color:var(--muted); margin:-10px 0 22px}
 
   /* Rules */
   .rules-grid{display:grid; grid-template-columns:1fr 1fr; gap:20px}
@@ -345,6 +347,8 @@
   }
   .gear-print .yen0{font-size:clamp(40px,5vw,58px)}
   .gear-card img{width:100%; border:2px solid var(--line); margin-bottom:18px; background:#fff}
+  .gear-imgs{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:18px}
+  .gear-imgs img{margin-bottom:0}
   .gear-spec{border:2px solid var(--line); margin-top:auto}
   .gear-spec div{display:flex; justify-content:space-between; gap:12px; padding:8px 12px; font-size:13px}
   .gear-spec div + div{border-top:2px solid var(--panel2)}
@@ -372,6 +376,8 @@
 .spotify-quiet{max-width:1280px;margin:0 auto;padding:6px 20px 36px}
 .spotify-quiet-label{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.16em;color:var(--muted);margin-bottom:8px}
 .spotify-quiet iframe{display:block;width:100%;border:0}
+.playlist-head{font-family:"Archivo",sans-serif;font-weight:900;font-size:clamp(20px,3vw,28px);letter-spacing:.04em;text-transform:uppercase;margin:0 0 8px}
+.playlist-lead{max-width:720px;color:var(--muted);font-size:14px;margin:0 0 14px}
   .sound-caption{display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.12em; color:#a9a9a2; padding:10px 12px; background:#0d0d0d; border-top:2px solid #333}
   .sound-caption a{color:#f5f5f2; text-decoration:none; font-weight:700}
   .sound-caption a:hover{text-decoration:underline}
@@ -395,6 +401,7 @@
   .base-box .base span{font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:500; color:var(--muted)}
   .status-line{font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:700; letter-spacing:.1em; margin-top:12px}
   .status-line i{display:inline-block; width:9px; height:9px; background:var(--ink); border-radius:50%; margin-right:8px}
+  .status-desc{font-size:12px; line-height:1.7; color:var(--muted); margin:10px 0 0}
   .privacy-note{font-size:11px; color:var(--muted); margin-top:10px}
 
   /* Magazine — "FREE" PAPER archive */
@@ -409,6 +416,8 @@
   .join-club-link{margin:22px 0 0; font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:700; letter-spacing:.12em}
   .join-club-link a{text-decoration:none; border-bottom:2px solid currentColor; padding-bottom:3px}
   .join-club-link a:hover{opacity:.72}
+  .join-points{list-style:none; margin:24px 0 0; padding:18px 0 0; border-top:1px solid rgba(128,128,120,.4); font-family:"Archivo",sans-serif; font-weight:900; text-transform:uppercase; font-size:clamp(19px,2.6vw,26px); line-height:1.5}
+  .join-points li::before{content:"⚫︎"; margin-right:12px; font-size:.6em; vertical-align:.3em}
   @media (max-width:640px){ .mag-item{width:min(210px,74vw)} }
 
   /* Footer */
@@ -485,9 +494,11 @@
     </a>
     <nav class="main" aria-label="メインナビゲーション">
       <a href="#manifesto">01. MANIFESTO</a>
-      <a href="#divisions">03. DIVISIONS</a>
-      <a href="#gear">04. GEAR ARCHIVE</a>
-      <a href="#contact">05. CONTACT</a>
+      <a href="#divisions">02. DIVISIONS</a>
+      <a href="#gear">03. GEAR ARCHIVE</a>
+      <a href="#contact">04. CONTACT</a>
+      <a href="#magazine">05. FREE PAPER</a>
+      <a href="#key-visual">06. KEY VISUAL</a>
     </nav>
     <div class="top-actions">
       <div class="lang-switch" role="group" aria-label="言語切替 / Language">
@@ -522,10 +533,8 @@
     <div class="hero-grid">
       <div>
         <p class="hero-desc">
-          An anti-elitist, minimalist athletic collective. Fueled by endurance, grit, and brutal austerity.
-          No expensive gyms. No luxury gear. Just asphalt and relentless distance.<br>
-          <span class="tx-jp"><strong>お金も、特権も、才能もいらない。必要なのは脚と路面だけ。</strong>仙台を起点に世界中へ——集まれなくても、同じ夜を走ることでつながる共同体として。</span>
-          <span class="tx-en">No money, no privilege, no talent needed. All you need is legs and asphalt. From Sendai to the world — a community bound not by gathering, but by running the same night.</span>
+          <span class="tx-jp"><strong>このランニングチームでは、金も、特権も、才能もいらない。必要なのは脚と路面だけ。</strong>仙台を起点に世界中へ——集まれなくても、同じ夜を走ることでつながる共同体として。</span>
+          <span class="tx-en">In this running team, no money, no privilege, and no talent are needed. All you need is legs and asphalt. From Sendai to the world — a community bound not by gathering, but by running the same night.</span>
         </p>
       </div>
     </div>
@@ -554,30 +563,19 @@
 
     <div class="cols2">
       <div class="manifesto-body">
-        <p>
+        <p class="en-only">
           “Kugyou Musen”（苦行無銭）rejects the commercialization of endurance sports.
           Modern athletic culture demands carbon-plated shoes, boutique gym memberships, and hyper-priced synthetic apparel.
           We believe true resilience is forged in scarcity.
         </p>
         <p>
-          When you strip away the luxury, what remains is the raw human engine.
-          Moving endlessly across the dark asphalt, our discipline requires zero budget.
+          <span class="en-only">When you strip away the luxury, what remains is the raw human engine.
+          Moving endlessly across the dark asphalt, our discipline requires zero budget.</span>
           <span class="tx-jp">重力とアスファルトは、すべての人類に平等である。我々が支払うのは、路面に滴り落ちる汗のみだ。</span>
           <span class="tx-en">Gravity and asphalt are equal to all of humanity. All we pay is the sweat that drips onto the road.</span>
         </p>
-        <div class="safety">
-          <div class="mark">¥0 ≠<br>無謀</div>
-          <div>
-            <p><span class="tx-jp"><strong>トレーニングにあたり、水・補給・帰宅手段は携える。苦行は自ら選ぶものであり、強要ではありません。</strong>歩くことも休息も中止もまた継続の一つの形です。</span>
-            <span class="tx-en">SUFFERING IS SELF-CHOSEN — NEVER FORCED ON OTHERS. ANY DISTANCE COUNTS. WALKING COUNTS. RESTING IS NOT QUITTING.</span></p>
-          </div>
-        </div>
       </div>
       <div>
-        <blockquote class="motto">
-          <div class="label">CORE MOTTO</div>
-          <div class="text">“Long Slow Distance<br>Move Like a Zombie.<br>Spend Zero.”</div>
-        </blockquote>
         <div class="jp-note">
           <h3><span class="h-jp">チーム理念</span><span class="h-en">TEAM PHILOSOPHY</span></h3>
           <p><span class="tx-jp">路面の上では、全員が対等である。走るということは、原始的で本能的な衝動である。高額なギアも洗練された施設も、走るという行為の価値を規定しない。</span><span class="tx-en">On the road, everyone is equal. Running is a primal, instinctive urge. Expensive gear and refined facilities do not define the value of the act of running.</span></p>
@@ -636,53 +634,14 @@
       </div>
     </div>
 
-    <div class="sec-head" style="margin-top:64px">
-      <span class="sec-num" style="font-size:clamp(24px,3.4vw,36px)">▸</span>
-      <h3 class="sec-title" style="font-size:clamp(20px,3vw,30px)">Heritage — Emblem Archive</h3>
-      <span class="sec-tag">チームロゴ/ THE FALLING MAN</span>
-    </div>
-    <p style="max-width:720px; color:var(--muted); margin:0 0 22px">
-      <span class="tx-jp">英雄のポーズではない。転倒し地面に落下する人のシルエット。それが苦行無銭の原点を表すものである。</span>
-      <span class="tx-en">Not a hero's pose. The silhouette of a person tripping and falling to the ground. That is what represents the origin of Kugyou Musen.</span>
-    </p>
-  </section>
-
-<!-- ============ 02 KEY VISUAL ============ -->
-<div class="keyvisual" id="key-visual">
-  <div class="keyvisual-in">
-    <div class="kv-head">
-      <span class="sec-num">02</span>
-      <h2 class="sec-title">Key Visual</h2>
-      <span class="sec-tag">[ OFFICIAL IMAGE — SITE &amp; PUBLIC RELATIONS ]</span>
-    </div>
-    <figure class="kv-frame">
-      <img src="assets/key-visual.jpg" alt="公式キービジュアル：黒背景に白い人物シルエットが手前に立ち、その残像が三角形に無限遠へ連なっていくアナログ映像風のイメージ" />
-      <figcaption class="kv-caption">
-        <span>KUGYOU MUSEN — KEY VISUAL</span>
-        <span>ANALOG ECHO / ONE BODY, INFINITE MILES</span>
-      </figcaption>
-    </figure>
-    <div class="kv-grid">
-      <p class="kv-lead">One runner.<br>Infinite afterimages.</p>
-      <div class="kv-body">
-        <p>
-          <span class="tx-jp">手前に立つのは、たった一人。だがその背後では、残像が分身のように連なり、三角形を描いて無限遠へ消えていく。一人で走り始めたはずの夜道に、いつの間にか無数の「走り続ける者たち」が重なっている。</span>
-          <span class="tx-en">In the foreground stands a single figure. Behind them, afterimages line up like doubles, drawing a triangle and vanishing into infinity. On a night road where you set out running alone, countless "ones who keep running" are layered in before you know it.</span>
-        </p>
-        <p>
-          <span class="tx-jp">速くも、派手でもない。ただ止まらずに進み続ける身体が、映像のノイズの中で増殖していく。</span>
-          <span class="tx-en">Not fast, not flashy. Just a body that keeps moving without stopping, multiplying within the noise of the image.</span>
-        </p>
-        <div class="kv-tags" aria-label="キービジュアルの使用用途">
-          <span>SITE KEY VISUAL</span>
-          <span>PRESS / PR</span>
-          <span>SNS HEADER</span>
-          <span>POSTER</span>
-        </div>
+    <div class="safety">
+      <div class="mark">¥0 ≠<br>無謀</div>
+      <div>
+        <p><span class="tx-jp"><strong>トレーニングにあたり、水・補給・帰宅手段は携える。苦行は自ら選ぶものであり、強要ではありません。</strong>歩くことも休息も中止もまた継続の一つの形です。</span>
+        <span class="tx-en">SUFFERING IS SELF-CHOSEN — NEVER FORCED ON OTHERS. ANY DISTANCE COUNTS. WALKING COUNTS. RESTING IS NOT QUITTING.</span></p>
       </div>
     </div>
-  </div>
-</div>
+  </section>
 
   <!-- ============ FIELD PHOTO — THE STRAIGHT ROAD ============ -->
   <div class="road-band" aria-label="フィールドフォト：冬のまっすぐな一本道">
@@ -700,20 +659,12 @@
     </p>
   </div>
 
-  <!-- ============ 03 DIVISIONS ============ -->
+  <!-- ============ 02 DIVISIONS ============ -->
   <section id="divisions">
     <div class="sec-head">
-      <span class="sec-num">03</span>
+      <span class="sec-num">02</span>
       <h2 class="sec-title">Divisions</h2>
       <span class="sec-tag">THE PILLARS OF UNPRIVILEGED ATHLETICS</span>
-    </div>
-
-    <div class="filter-row" role="group" aria-label="部門フィルター">
-      <button class="filter-btn" type="button" data-filter="all" aria-pressed="true">ALL</button>
-      <button class="filter-btn" type="button" data-filter="running" aria-pressed="false">01. RUNNING (MAIN)</button>
-      <!-- CYCLING 当面非表示：復帰時はこのコメントを外す
-      <button class="filter-btn" type="button" data-filter="cycling" aria-pressed="false">02. CYCLING (SUB)</button>
-      -->
     </div>
 
     <!-- CYCLING非表示中は1カラム（復帰時は style を外す） -->
@@ -721,10 +672,7 @@
       <article class="div-card" data-division="running">
         <img src="assets/hero-runner.jpg" alt="夜の街路を走るランナー" />
         <div class="body">
-          <div class="kind">CORE / MAIN DIVISION — STRAVA: RUNNING ONLY</div>
-          <div class="slogan">// MOVE LIKE A ZOMBIE</div>
-          <h3>RUNNING CLUB</h3>
-          <p>Night miles, asphalt hunger, and raw exhaustion. Running until the mind goes blank and instincts take over. Overcoming distance with zero budget. <span class="tx-jp">速さは問わない。1kmでも、歩いても、それが苦行になる。</span><span class="tx-en">Speed is not asked. Even 1km, even walking — that is what becomes the austerity.</span></p>
+          <p><span class="tx-jp">速さは問わない。1kmでも、歩いても、それが苦行になる。</span><span class="tx-en">Speed is not asked. Even 1km, even walking — that is what becomes the austerity.</span></p>
           <div class="spec">
             <div><div class="k">PRIMARY FOCUS</div><div class="v">DISTANCE &gt; SPEED</div></div>
             <div><div class="k">MINIMUM</div><div class="v">NONE — 1KM COUNTS</div></div>
@@ -751,12 +699,16 @@
 
     <div class="sec-head" style="margin-top:64px">
       <span class="sec-num" style="font-size:clamp(24px,3.4vw,36px)">▸</span>
-      <h3 class="sec-title" style="font-size:clamp(20px,3vw,30px)">Virtual Sessions</h3>
-      <span class="sec-tag"><span class="h-jp">集まれない。だから、同じ時刻に走る。</span><span class="h-en">WE CANNOT GATHER — SO WE RUN AT THE SAME TIME</span></span>
+      <h3 class="sec-title" style="font-size:clamp(20px,3vw,30px)">SESSIONS ( MAIN : VIRTUAL )</h3>
+      <span class="sec-tag"><span class="h-jp">集まらない。だから、同じ時刻に走る。</span><span class="h-en">WE CANNOT GATHER — SO WE RUN AT THE SAME TIME</span></span>
     </div>
     <p style="max-width:720px; color:var(--muted); margin:0 0 22px">
-      <span class="tx-jp">世界各地のメンバーが、それぞれの街で、同じ時刻・同じ条件で走る同期型セッション。全セッション共通の鉄則：<strong style="color:var(--ink)">無銭は無謀を意味しない。——自分の体力と相談し、水・補給・帰宅手段を必ず携える。体調不良や悪天候で中止するのも継続の一つの形。</strong></span>
-      <span class="tx-en">Synchronized sessions in which members around the world run in their own cities, at the same time, under the same conditions. One rule for all sessions: no money does not mean reckless. Consult your own physical condition, and always carry water, fuel, and a way home. Cancelling for poor condition or bad weather is also a form of continuing.</span>
+      <span class="tx-jp">世界各地のメンバーが、それぞれの街で、同じ時刻・同じ条件で走る同期型セッション。</span>
+      <span class="tx-en">Synchronized sessions in which members around the world run in their own cities, at the same time, under the same conditions.</span>
+    </p>
+    <p class="session-note">
+      <span class="tx-jp">全セッション共通の鉄則：無銭は無謀を意味しない。——自分の体力と相談し、水・補給・帰宅手段を必ず携える。体調不良や悪天候で中止するのも継続の一つの形。</span>
+      <span class="tx-en">One rule for all sessions: no money does not mean reckless. Consult your own physical condition, and always carry water, fuel, and a way home. Cancelling for poor condition or bad weather is also a form of continuing.</span>
     </p>
     <p style="max-width:720px; color:var(--muted); margin:0 0 22px"><span class="tx-jp">セッションの内容と日時は以下のとおり。詳細はSNSでアナウンスします。</span><span class="tx-en">The sessions and their schedules are as follows. Details are announced on social media.</span></p>
     <div class="session-list">
@@ -821,52 +773,26 @@
     </div>
   </section>
 
-  <!-- ============ 04 GEAR ARCHIVE ============ -->
+  <!-- ============ 03 GEAR ARCHIVE ============ -->
   <section id="gear">
     <div class="sec-head">
-      <span class="sec-num">04</span>
+      <span class="sec-num">03</span>
       <h2 class="sec-title">Gear Archive</h2>
       <span class="sec-tag">ARCHIVE OF ACTUAL TEAM WEAR</span>
-    </div>
-    <div class="gear-note">
-      <span>[ ARCHIVE — NOT FOR SALE ]</span>
-      <span>[ ACTUAL PAST DESIGNS ]</span>
-      <span>[ PHOTO — ON RAW CONCRETE ]</span>
-      <span>[ 販売物ではありません ]</span>
     </div>
     <p style="max-width:720px; color:var(--muted); margin:0 0 26px">
       <span class="tx-jp">ここに並ぶのは、実際に作られたチームウェアの記録である。チームウェアもまた活動のアーカイブである。</span>
       <span class="tx-en">What is lined up here is a record of team wear that was actually made. Team wear, too, is an archive of the activity.</span>
     </p>
-    <!-- 写真は当面1点のみ表示（追加時はこのコメントと style を外し、ストック分のコメントを外す） -->
     <div class="gear-grid" style="grid-template-columns:1fr">
       <article class="gear-card">
-        <img src="assets/wear-tee-black.jpg" alt="打ちっぱなしのコンクリート壁に前後を並べて掛けた黒のドライTシャツの写真（イメージ）：前面に JOGGING JUNKIE、背面に ANTI CLIMAX のプリント" />
-        <p class="gear-img-note"><span class="tx-jp">写真はイメージです。実物の記録写真への差し替えを進めています。</span><span class="tx-en">Photo is an image. Archival photos of the actual pieces are in preparation.</span></p>
-        <div class="code">WEAR-01 // DRY TEE — BLACK</div>
-        <h3>JOGGING JUNKIE TEE</h3>
-        <div class="gear-spec">
-          <div><span class="k">FRONT</span><span class="v">JOGGING JUNKIE</span></div>
-          <div><span class="k">BACK</span><span class="v">ANTI CLIMAX</span></div>
-          <div><span class="k">BODY</span><span class="v">4.4oz DRY POLYESTER / BLACK</span></div>
-          <div><span class="k">PRINT</span><span class="v">WHITE</span></div>
+        <div class="gear-imgs">
+          <img src="assets/wear-tee-black.jpg" alt="打ちっぱなしのコンクリート壁に前後を並べて掛けた黒のドライTシャツの写真：前面に JOGGING JUNKIE、背面に ANTI CLIMAX のプリント" />
+          <img src="assets/wear-tee-white.jpg" alt="打ちっぱなしのコンクリート壁に前後を並べて掛けた白のドライTシャツの写真：前面に JOGGING JUNKIE、背面に ANTI CLIMAX のプリント" />
         </div>
-      </article>
-
-      <!-- 当面非表示（ストック）：追加時はこのコメントを外す
-      <article class="gear-card">
-        <img src="assets/wear-tee-white.jpg" alt="打ちっぱなしのコンクリート壁に前後を並べて掛けた白のドライTシャツの写真（イメージ）：前面に JOGGING JUNKIE、背面に ANTI CLIMAX のプリント" />
-        <div class="code">WEAR-02 // DRY TEE — WHITE</div>
+        <div class="code">WEAR-01 // DRY TEE — BLACK&WHITE</div>
         <h3>JOGGING JUNKIE TEE</h3>
-        <p>同デザインの白ボディ版。黒文字で、さらに無機質に、さらに安っぽく。それが正装。</p>
-        <div class="gear-spec">
-          <div><span class="k">FRONT</span><span class="v">JOGGING JUNKIE</span></div>
-          <div><span class="k">BACK</span><span class="v">ANTI CLIMAX</span></div>
-          <div><span class="k">BODY</span><span class="v">4.4oz DRY POLYESTER / WHITE</span></div>
-          <div><span class="k">PRINT</span><span class="v">BLACK</span></div>
-        </div>
       </article>
-      -->
 
       <!-- 当面非表示（ストック）：追加時はこのコメントを外す
       <article class="gear-card">
@@ -929,15 +855,14 @@
   </section>
   </template>
 
-  <!-- ============ 05 CONTACT / JOIN ============ -->
+  <!-- ============ 04 CONTACT / JOIN ============ -->
   <section id="contact">
     <div class="sec-head">
-      <span class="sec-num">05</span>
+      <span class="sec-num">04</span>
       <h2 class="sec-title">Contact / Join</h2>
     </div>
     <div class="join-wrap">
       <div class="join-main">
-        <h3>Far from home.<br>Broke in pocket.<br>Rich in miles.</h3>
         <p>
           <span class="tx-jp">入会について:苦行無銭は、チームの理念、コンセプトに賛同する方の参加を随時募集しています。参加に、会費も審査も最低距離もありません。本部は Strava クラブ<strong>「苦行無銭 — No Money Running Club」</strong>（Running Only / Public）。思想と物語はこのサイトに、記録と連帯は Strava に。</span>
           <span class="tx-en">About joining: Kugyou Musen welcomes, at any time, those who share the team's philosophy and concept. There is no fee, no screening, and no minimum distance. Headquarters is the Strava club "Kugyou Musen — No Money Running Club" (Running Only / Public). The ideas and the stories live on this site; the records and the solidarity live on Strava.</span>
@@ -948,6 +873,11 @@
           <li><span class="tx-jp">セッションの日は、世界各地のメンバーと同じ時刻にアスファルトへ</span><span class="tx-en">On session days, take to the asphalt at the same time as members around the world.</span></li>
         </ol>
         <div class="join-club-link"><a href="https://strava.app.link/IsecHeEWe8b" target="_blank" rel="noopener">STRAVA CLUB — <span class="h-jp">クラブに参加する</span> →</a><span class="h-en">JOIN THE CLUB ON STRAVA</span></div>
+        <ul class="join-points">
+          <li>Far from home.</li>
+          <li>Broke in pocket.</li>
+          <li>Rich in miles.</li>
+        </ul>
       </div>
       <div class="join-side">
         <div class="base-box">
@@ -956,15 +886,16 @@
           <div class="base">BASE 02: TOKYO SUB <span>35.6762° N, 139.6503° E</span></div>
           <div class="base">BASE 03: YOUR CITY <span>WORLDWIDE / WHEREVER YOU RUN</span></div>
           <div class="status-line"><i></i>STATUS: OPERATIONAL 24/7</div>
+          <p class="status-desc">An anti-elitist, minimalist athletic collective. Fueled by endurance, grit, and brutal austerity. No expensive gyms. No luxury gear. Just asphalt and relentless distance.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ 06 MAGAZINE — "FREE" PAPER ARCHIVE ============ -->
+  <!-- ============ 05 MAGAZINE — "FREE" PAPER ARCHIVE ============ -->
   <section id="magazine">
     <div class="sec-head">
-      <span class="sec-num">06</span>
+      <span class="sec-num">05</span>
       <h2 class="sec-title">"Free" Paper Archive</h2>
       <span class="sec-tag"><span class="h-jp">WEBマガジン — バックナンバー</span><span class="h-en">WEB MAGAZINE — BACK ISSUES</span></span>
     </div>
@@ -980,22 +911,70 @@
         <a href="magazine/FREE-PAPER-vol002.pdf" target="_blank" rel="noopener">
           <img src="assets/magazine/vol002-cover.jpg" alt="&quot;FREE&quot; PAPER Vol.002 の表紙 — 冬・凍結、雪の木立" loading="lazy" />
         </a>
-        <figcaption>Vol.002 — 2025.12.25</figcaption>
+        <figcaption>Vol.002 — 2026.01.25</figcaption>
       </figure>
       <figure class="mag-item">
         <a href="magazine/FREE-PAPER-vol003.pdf" target="_blank" rel="noopener">
           <img src="assets/magazine/vol003-cover.jpg" alt="&quot;FREE&quot; PAPER Vol.003 の表紙 — 留学生、開いた両手のひら" loading="lazy" />
         </a>
-        <figcaption>Vol.003 — 2026.01.25</figcaption>
+        <figcaption>Vol.003 — 2026.03.25</figcaption>
       </figure>
     </div>
     <p class="mag-note"><span class="tx-jp">本サイトおよび『"FREE" PAPER』の日付は、創刊を2025年11月に置く編集上の紀年による。記録の内容は、各号・各記事の制作時点のものである。</span><span class="tx-en">Dates on this site and in "FREE" PAPER follow an editorial calendar that places the founding in November 2025. Each record reflects the time of its making.</span></p>
   </section>
+
+<!-- ============ 06 KEY VISUAL ============ -->
+<div class="keyvisual" id="key-visual">
+  <div class="keyvisual-in">
+    <div class="kv-head">
+      <span class="sec-num">06</span>
+      <h2 class="sec-title">Key Visual</h2>
+      <span class="sec-tag">[ OFFICIAL IMAGE — SITE &amp; PUBLIC RELATIONS ]</span>
+    </div>
+    <div class="sec-head" style="margin-top:0; border-bottom-color:#f5f5f2">
+      <span class="sec-num" style="font-size:clamp(24px,3.4vw,36px)">▸</span>
+      <h3 class="sec-title" style="font-size:clamp(20px,3vw,30px)">Heritage — Emblem Archive</h3>
+      <span class="sec-tag" style="color:#a9a9a2">チームロゴ/ THE FALLING MAN</span>
+    </div>
+    <p style="max-width:720px; color:#d8d8d2; margin:0 0 26px">
+      <span class="tx-jp">英雄のポーズではない。転倒し地面に落下する人のシルエット。それが苦行無銭の原点を表すものである。</span>
+      <span class="tx-en">Not a hero's pose. The silhouette of a person tripping and falling to the ground. That is what represents the origin of Kugyou Musen.</span>
+    </p>
+    <figure class="kv-frame">
+      <img src="assets/key-visual.jpg" alt="公式キービジュアル：黒背景に白い人物シルエットが手前に立ち、その残像が三角形に無限遠へ連なっていくアナログ映像風のイメージ" />
+      <figcaption class="kv-caption">
+        <span>KUGYOU MUSEN — KEY VISUAL</span>
+        <span>ANALOG ECHO / ONE BODY, INFINITE MILES</span>
+      </figcaption>
+    </figure>
+    <div class="kv-grid">
+      <p class="kv-lead">One runner.<br>Infinite afterimages.</p>
+      <div class="kv-body">
+        <p>
+          <span class="tx-jp">手前に立つのは、たった一人。だがその背後では、残像が分身のように連なり、三角形を描いて無限遠へ消えていく。一人で走り始めたはずの夜道に、いつの間にか無数の「走り続ける者たち」が重なっている。</span>
+          <span class="tx-en">In the foreground stands a single figure. Behind them, afterimages line up like doubles, drawing a triangle and vanishing into infinity. On a night road where you set out running alone, countless "ones who keep running" are layered in before you know it.</span>
+        </p>
+        <p>
+          <span class="tx-jp">速くも、派手でもない。ただ止まらずに進み続ける身体が、映像のノイズの中で増殖していく。</span>
+          <span class="tx-en">Not fast, not flashy. Just a body that keeps moving without stopping, multiplying within the noise of the image.</span>
+        </p>
+        <div class="kv-tags" aria-label="キービジュアルの使用用途">
+          <span>SITE KEY VISUAL</span>
+          <span>PRESS / PR</span>
+          <span>SNS HEADER</span>
+          <span>POSTER</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 </main>
 
 <!-- Spotifyプレイヤー：SOUNDセクション非表示に伴い、フッター直前に目立たない形で配置 -->
 <div class="spotify-quiet">
-  <div class="spotify-quiet-label">PLAYLIST — SPOTIFY</div>
+  <h3 class="playlist-head">PLAYLIST</h3>
+  <p class="playlist-lead"><span class="tx-jp">ランニング中の音楽をお探しであれば、チームのプレイリストをここに置いておきます。聴くかどうかは、走る人の自由です。</span><span class="tx-en">If you are looking for music to run to, the team's playlist is here. Whether you listen or not is entirely up to you.</span></p>
+  <div class="spotify-quiet-label">SPOTIFY</div>
   <iframe src="https://open.spotify.com/embed/playlist/3887MDb3kNZVjKp2g95Eeb?utm_source=generator&theme=0" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="&quot;SHARE&quot; RUNNING MUSIC — Spotifyプレイリスト"></iframe>
   <p class="spotify-note"><span class="tx-jp">掲載している楽曲は、ランニング時のリズムや純粋な音楽的好みによって選曲したものです。曲名や歌詞に含まれる表現・メッセージは当クラブの思想や主張を反映するものではなく、特定の個人・団体への批判や賛同の意図はありません。</span><span class="tx-en">The tracks featured here were selected purely for their rhythm while running and for personal musical taste. The expressions and messages contained in song titles and lyrics do not reflect the ideas or positions of this club, and are not intended as criticism of, or endorsement of, any specific individual or organization.</span></p>
 </div>
