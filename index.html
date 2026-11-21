@@ -520,7 +520,6 @@
         <button type="button" data-set-lang="jp" aria-pressed="true">JP</button>
         <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
       </div>
-      <button class="crt-toggle" id="crtToggle" type="button" aria-pressed="true">CRT: ON</button>
     </div>
   </div>
 </header>
@@ -1029,19 +1028,12 @@
 
 <script>
 (function(){
-  document.body.classList.add('crt');
+  /* CRT effect removed (2026-11-22): toggle button deleted, effect fixed OFF.
+     The .crt CSS rules remain in the stylesheet but are never activated. */
 
   /* Ticker: duplicate content for seamless loop */
   var track = document.getElementById('tickerTrack');
   track.innerHTML += track.innerHTML;
-
-  /* CRT toggle */
-  var crtBtn = document.getElementById('crtToggle');
-  crtBtn.addEventListener('click', function(){
-    var on = document.body.classList.toggle('crt');
-    crtBtn.textContent = 'CRT: ' + (on ? 'ON' : 'OFF');
-    crtBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
-  });
 
   /* Division filter */
   var filterBtns = Array.prototype.slice.call(document.querySelectorAll('.filter-btn'));
