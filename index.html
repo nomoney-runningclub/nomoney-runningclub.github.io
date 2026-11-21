@@ -11,6 +11,21 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=IBM+Plex+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet" />
+<script>
+/* Language mode — decided before first paint.
+   Priority: ?lang=jp|en  >  localStorage("km-lang")  >  browser language (ja* -> jp, else en). */
+(function(){
+  var lang = null;
+  var m = /[?&]lang=(jp|en)(?=&|#|$)/.exec(window.location.search);
+  if (m) lang = m[1];
+  if (!lang) { try { lang = window.localStorage.getItem('km-lang'); } catch (e) {} }
+  if (lang !== 'jp' && lang !== 'en') {
+    lang = (window.navigator.language || '').toLowerCase().indexOf('ja') === 0 ? 'jp' : 'en';
+  }
+  document.documentElement.setAttribute('data-lang', lang);
+  document.documentElement.setAttribute('lang', lang === 'jp' ? 'ja' : 'en');
+})();
+</script>
 <style>
   :root{
     --bg:#f4f4f2; --ink:#0a0a0a; --panel:#ffffff; --panel2:#e9e9e6;
@@ -42,6 +57,37 @@
   .keyvisual .tx-en{color:#a9a9a2}
   .code-item .tx-en{color:var(--inv-muted)}
   .join-main .tx-en{color:inherit; opacity:.65}
+  /* ---------- Language switch (JP | EN) ---------- */
+  .lang-switch{display:flex; border:2px solid var(--line)}
+  .lang-switch button{
+    font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:700; letter-spacing:.08em;
+    background:none; color:var(--muted); border:none; padding:7px 9px; cursor:pointer;
+  }
+  .lang-switch button[aria-pressed="true"]{background:var(--ink); color:var(--bg)}
+  /* EN mode: mirror of the JP layout — EN becomes the primary text,
+     JP drops below it in the same subordinate style .tx-en has in JP mode. */
+  html[data-lang="en"] :is(p,li):has(> .tx-en){display:flex; flex-direction:column}
+  html[data-lang="en"] :is(p,li):has(> .tx-en) > br{display:none}
+  html[data-lang="en"] .tx-en{order:1; font-size:1em; color:inherit; margin-top:0}
+  html[data-lang="en"] .join-main .tx-en{opacity:1}
+  html[data-lang="en"] .rules-box li .tx-en{color:var(--muted)}
+  html[data-lang="en"] .rules-inv .rules-box li .tx-en{color:var(--inv-muted)}
+  html[data-lang="en"] .tx-jp{
+    order:2; display:block; font-size:.8em; line-height:1.65;
+    color:var(--muted); margin-top:.45em; font-weight:400;
+  }
+  html[data-lang="en"] .hero .tx-jp, html[data-lang="en"] .keyvisual .tx-jp{color:#a9a9a2}
+  html[data-lang="en"] .code-item .tx-jp{color:var(--inv-muted)}
+  html[data-lang="en"] .join-main .tx-jp{color:inherit; opacity:.65}
+  html[data-lang="en"] .h-jp{
+    font-family:"IBM Plex Mono",monospace; font-size:10px; font-weight:700;
+    letter-spacing:.12em; opacity:.7; margin-right:10px; white-space:nowrap;
+  }
+  html[data-lang="en"] .h-en{
+    font-family:inherit; font-size:inherit; font-weight:inherit;
+    letter-spacing:inherit; opacity:1; margin-left:0; white-space:normal;
+  }
+  html[data-lang="en"] .session .when .h-jp{margin-right:2px}
   .spotify-note{font-size:11px; line-height:1.7; color:var(--muted); margin:10px 0 0}
   img{max-width:100%; display:block}
   a{color:inherit}
@@ -445,6 +491,10 @@
       <a href="#contact">05. CONTACT</a>
     </nav>
     <div class="top-actions">
+      <div class="lang-switch" role="group" aria-label="言語切替 / Language">
+        <button type="button" data-set-lang="jp" aria-pressed="true">JP</button>
+        <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+      </div>
       <button class="crt-toggle" id="crtToggle" type="button" aria-pressed="true">CRT: ON</button>
       <a class="btn ghost" href="#contact">JOIN</a>
       <a class="btn" href="#gear">GEAR</a>
@@ -475,8 +525,7 @@
         <p class="hero-desc">
           An anti-elitist, minimalist athletic collective. Fueled by endurance, grit, and brutal austerity.
           No expensive gyms. No luxury gear. Just asphalt and relentless distance.<br>
-          <strong>お金も、特権も、才能もいらない。必要なのは脚と路面だけ。</strong>
-          仙台を起点に世界中へ——集まれなくても、同じ夜を走ることでつながる共同体として。
+          <span class="tx-jp"><strong>お金も、特権も、才能もいらない。必要なのは脚と路面だけ。</strong>仙台を起点に世界中へ——集まれなくても、同じ夜を走ることでつながる共同体として。</span>
           <span class="tx-en">No money, no privilege, no talent needed. All you need is legs and asphalt. From Sendai to the world — a community bound not by gathering, but by running the same night.</span>
         </p>
       </div>
@@ -514,7 +563,7 @@
         <p>
           When you strip away the luxury, what remains is the raw human engine.
           Moving endlessly across the dark asphalt, our discipline requires zero budget.
-          重力とアスファルトは、すべての人類に平等である。我々が支払うのは、路面に滴り落ちる汗のみだ。
+          <span class="tx-jp">重力とアスファルトは、すべての人類に平等である。我々が支払うのは、路面に滴り落ちる汗のみだ。</span>
           <span class="tx-en">Gravity and asphalt are equal to all of humanity. All we pay is the sweat that drips onto the road.</span>
         </p>
         <div class="safety">
@@ -531,9 +580,9 @@
           <div class="text">“Long Slow Distance<br>Move Like a Zombie.<br>Spend Zero.”</div>
         </blockquote>
         <div class="jp-note">
-          <h3>チーム理念<span class="h-en">TEAM PHILOSOPHY</span></h3>
-          <p>路面の上では、全員が対等である。走るということは、原始的で本能的な衝動である。高額なギアも洗練された施設も、走るという行為の価値を規定しない。<span class="tx-en">On the road, everyone is equal. Running is a primal, instinctive urge. Expensive gear and refined facilities do not define the value of the act of running.</span></p>
-          <p>金銭に依拠せず挑むことの静かな誇り。無心でアスファルトに立ち向かう。肩書・国籍・年収・ラン歴は、靴箱や玄関に置いていけ。<span class="tx-en">The quiet pride of taking on the challenge without relying on money. Facing the asphalt with an empty mind. Leave your title, nationality, income, and running history in the shoe cupboard, at the front door.</span></p>
+          <h3><span class="h-jp">チーム理念</span><span class="h-en">TEAM PHILOSOPHY</span></h3>
+          <p><span class="tx-jp">路面の上では、全員が対等である。走るということは、原始的で本能的な衝動である。高額なギアも洗練された施設も、走るという行為の価値を規定しない。</span><span class="tx-en">On the road, everyone is equal. Running is a primal, instinctive urge. Expensive gear and refined facilities do not define the value of the act of running.</span></p>
+          <p><span class="tx-jp">金銭に依拠せず挑むことの静かな誇り。無心でアスファルトに立ち向かう。肩書・国籍・年収・ラン歴は、靴箱や玄関に置いていけ。</span><span class="tx-en">The quiet pride of taking on the challenge without relying on money. Facing the asphalt with an empty mind. Leave your title, nationality, income, and running history in the shoe cupboard, at the front door.</span></p>
         </div>
       </div>
     </div>
@@ -541,35 +590,35 @@
     <div class="code-grid" aria-label="行動規範 THE CODE">
       <div class="code-item">
         <h4><span class="en-sm">ZERO-BUDGET PHILOSOPHY</span>無銭の美学</h4>
-        <p>高額なギアは意志の補強にならない。どんなウェアであろうと、アスファルトの上ではすべてのランナーが平等であり、試されるのは意志のみ。<span class="tx-en">Expensive gear does not reinforce the will. Whatever you wear, on the asphalt every runner is equal, and the only thing tested is the will.</span></p>
+        <p><span class="tx-jp">高額なギアは意志の補強にならない。どんなウェアであろうと、アスファルトの上ではすべてのランナーが平等であり、試されるのは意志のみ。</span><span class="tx-en">Expensive gear does not reinforce the will. Whatever you wear, on the asphalt every runner is equal, and the only thing tested is the will.</span></p>
       </div>
       <div class="code-item">
         <h4><span class="en-sm">RUN IN SILENCE, RUN ALONE</span>黙々と駆け抜ける</h4>
-        <p>一人で構わない。集団である必要はない。日本の夜道でも世界のどこかでも、基本は「自分 vs アスファルト」。静寂の中にだけ、本当の対話がある。<span class="tx-en">Alone is fine. There is no need to be a group. On a night road in Japan, or anywhere in the world, the basics are the same: you vs. the asphalt. True dialogue exists only within silence.</span></p>
+        <p><span class="tx-jp">一人で構わない。集団である必要はない。日本の夜道でも世界のどこかでも、基本は「自分 vs アスファルト」。静寂の中にだけ、本当の対話がある。</span><span class="tx-en">Alone is fine. There is no need to be a group. On a night road in Japan, or anywhere in the world, the basics are the same: you vs. the asphalt. True dialogue exists only within silence.</span></p>
       </div>
       <div class="code-item">
         <h4><span class="en-sm">NO PRIVILEGE, NO EXCUSES</span>言い訳の排除</h4>
-        <p>天候を理由にしない。無銭もやらない理由にはならない。(ただし体調不良は別—中止も切り上げもまた継続の一つの形)<span class="tx-en">Weather is no excuse. Having no money is no reason not to run, either. (Poor physical condition is another matter — stopping, and cutting a run short, are also forms of continuing.)</span></p>
+        <p><span class="tx-jp">天候を理由にしない。無銭もやらない理由にはならない。(ただし体調不良は別—中止も切り上げもまた継続の一つの形)</span><span class="tx-en">Weather is no excuse. Having no money is no reason not to run, either. (Poor physical condition is another matter — stopping, and cutting a run short, are also forms of continuing.)</span></p>
       </div>
       <div class="code-item">
         <h4><span class="en-sm">OUTCAST PRIDE</span>街のエトランゼとしての誇り</h4>
-        <p>見知らぬ街、慣れない言語。それでも重力とアスファルトは平等。このチームは異邦人も歓迎する。<span class="tx-en">An unfamiliar city, an unfamiliar language. Even so, gravity and asphalt are equal. This team welcomes strangers, too.</span></p>
+        <p><span class="tx-jp">見知らぬ街、慣れない言語。それでも重力とアスファルトは平等。このチームは異邦人も歓迎する。</span><span class="tx-en">An unfamiliar city, an unfamiliar language. Even so, gravity and asphalt are equal. This team welcomes strangers, too.</span></p>
       </div>
       <div class="code-item">
         <h4><span class="en-sm">ANTI-COMMERCIAL STANCE</span>商業主義からの離脱</h4>
-        <p>走行距離は買うことができない。ギアの値段はランナーの価値を決めない。誇示ではなく、記録で語れ。<span class="tx-en">Distance cannot be bought. The price of gear does not decide a runner's worth. Speak with records, not with showing off.</span></p>
+        <p><span class="tx-jp">走行距離は買うことができない。ギアの値段はランナーの価値を決めない。誇示ではなく、記録で語れ。</span><span class="tx-en">Distance cannot be bought. The price of gear does not decide a runner's worth. Speak with records, not with showing off.</span></p>
       </div>
       <div class="code-item">
         <h4><span class="en-sm">ABSOLUTE SELF-DISCIPLINE</span>絶対的な自己規律</h4>
-        <p>他人の「いいね」で満たされるな。Kudosは義務ではない。誰に見られていなくとも、己の定めた美学を裏切らない。<span class="tx-en">Do not let other people's "likes" fill you. Kudos are not an obligation. Even when no one is watching, never betray the aesthetics you have set for yourself.</span></p>
+        <p><span class="tx-jp">他人の「いいね」で満たされるな。Kudosは義務ではない。誰に見られていなくとも、己の定めた美学を裏切らない。</span><span class="tx-en">Do not let other people's "likes" fill you. Kudos are not an obligation. Even when no one is watching, never betray the aesthetics you have set for yourself.</span></p>
       </div>
       <div class="code-item">
         <h4><span class="en-sm">NO PACE PRIDE</span>タイム至上主義の撤廃</h4>
-        <p>速さを競う場ではない。過酷な条件のもと淡々と積み上げた距離と、休んで戻ってきた回数こそを称える。競うべきは昨日の己。<span class="tx-en">This is not a place to compete on speed. What we honor is the distance steadily built under harsh conditions, and the number of times you rested and came back. The one to compete with is yesterday's self.</span></p>
+        <p><span class="tx-jp">速さを競う場ではない。過酷な条件のもと淡々と積み上げた距離と、休んで戻ってきた回数こそを称える。競うべきは昨日の己。</span><span class="tx-en">This is not a place to compete on speed. What we honor is the distance steadily built under harsh conditions, and the number of times you rested and came back. The one to compete with is yesterday's self.</span></p>
       </div>
       <div class="code-item">
         <h4><span class="en-sm">UNFILTERED RECORDS</span>失敗ログの無削除</h4>
-        <p>途中で脚が止まった記録も消す必要はない。無傷の栄光より、打ちのめされた葛藤のログにこそ真実が宿る。<span class="tx-en">There is no need to erase a record where your legs stopped midway. Truth lives not in unscarred glory, but in the log of being beaten down and struggling through.</span></p>
+        <p><span class="tx-jp">途中で脚が止まった記録も消す必要はない。無傷の栄光より、打ちのめされた葛藤のログにこそ真実が宿る。</span><span class="tx-en">There is no need to erase a record where your legs stopped midway. Truth lives not in unscarred glory, but in the log of being beaten down and struggling through.</span></p>
       </div>
     </div>
 
@@ -594,7 +643,7 @@
       <span class="sec-tag">チームロゴ/ THE FALLING MAN</span>
     </div>
     <p style="max-width:720px; color:var(--muted); margin:0 0 22px">
-      英雄のポーズではない。転倒し地面に落下する人のシルエット。それが苦行無銭の原点を表すものである。
+      <span class="tx-jp">英雄のポーズではない。転倒し地面に落下する人のシルエット。それが苦行無銭の原点を表すものである。</span>
       <span class="tx-en">Not a hero's pose. The silhouette of a person tripping and falling to the ground. That is what represents the origin of Kugyou Musen.</span>
     </p>
   </section>
@@ -618,12 +667,11 @@
       <p class="kv-lead">One runner.<br>Infinite afterimages.</p>
       <div class="kv-body">
         <p>
-          手前に立つのは、たった一人。だがその背後では、残像が分身のように連なり、三角形を描いて無限遠へ消えていく。
-          一人で走り始めたはずの夜道に、いつの間にか無数の「走り続ける者たち」が重なっている。
+          <span class="tx-jp">手前に立つのは、たった一人。だがその背後では、残像が分身のように連なり、三角形を描いて無限遠へ消えていく。一人で走り始めたはずの夜道に、いつの間にか無数の「走り続ける者たち」が重なっている。</span>
           <span class="tx-en">In the foreground stands a single figure. Behind them, afterimages line up like doubles, drawing a triangle and vanishing into infinity. On a night road where you set out running alone, countless "ones who keep running" are layered in before you know it.</span>
         </p>
         <p>
-          速くも、派手でもない。ただ止まらずに進み続ける身体が、映像のノイズの中で増殖していく。
+          <span class="tx-jp">速くも、派手でもない。ただ止まらずに進み続ける身体が、映像のノイズの中で増殖していく。</span>
           <span class="tx-en">Not fast, not flashy. Just a body that keeps moving without stopping, multiplying within the noise of the image.</span>
         </p>
         <div class="kv-tags" aria-label="キービジュアルの使用用途">
@@ -648,8 +696,7 @@
     </figure>
     <p class="road-lead">One straight line. Nothing else needed.</p>
     <p class="road-note">
-      曲がりくねった言い訳はいらない。黒い地面、白い手すり、抜けた空——三つに区切られた冬の道を、ただまっすぐ進む。
-      セッションの舞台はいつもこういう場所だ。誰の街にもある、何の変哲もない一本道。
+      <span class="tx-jp">曲がりくねった言い訳はいらない。黒い地面、白い手すり、抜けた空——三つに区切られた冬の道を、ただまっすぐ進む。セッションの舞台はいつもこういう場所だ。誰の街にもある、何の変哲もない一本道。</span>
       <span class="tx-en">No winding excuses are needed. Black ground, a white railing, an open sky — a winter road divided into three, and you simply go straight. The stage for our sessions is always a place like this: an unremarkable straight road that exists in everyone's city.</span>
     </p>
   </div>
@@ -678,7 +725,7 @@
           <div class="kind">CORE / MAIN DIVISION — STRAVA: RUNNING ONLY</div>
           <div class="slogan">// MOVE LIKE A ZOMBIE</div>
           <h3>RUNNING CLUB</h3>
-          <p>Night miles, asphalt hunger, and raw exhaustion. Running until the mind goes blank and instincts take over. Overcoming distance with zero budget. 速さは問わない。1kmでも、歩いても、それが苦行になる。<span class="tx-en">Speed is not asked. Even 1km, even walking — that is what becomes the austerity.</span></p>
+          <p>Night miles, asphalt hunger, and raw exhaustion. Running until the mind goes blank and instincts take over. Overcoming distance with zero budget. <span class="tx-jp">速さは問わない。1kmでも、歩いても、それが苦行になる。</span><span class="tx-en">Speed is not asked. Even 1km, even walking — that is what becomes the austerity.</span></p>
           <div class="spec">
             <div><div class="k">PRIMARY FOCUS</div><div class="v">DISTANCE &gt; SPEED</div></div>
             <div><div class="k">MINIMUM</div><div class="v">NONE — 1KM COUNTS</div></div>
@@ -706,20 +753,19 @@
     <div class="sec-head" style="margin-top:64px">
       <span class="sec-num" style="font-size:clamp(24px,3.4vw,36px)">▸</span>
       <h3 class="sec-title" style="font-size:clamp(20px,3vw,30px)">Virtual Sessions</h3>
-      <span class="sec-tag">集まれない。だから、同じ時刻に走る。<span class="h-en">WE CANNOT GATHER — SO WE RUN AT THE SAME TIME</span></span>
+      <span class="sec-tag"><span class="h-jp">集まれない。だから、同じ時刻に走る。</span><span class="h-en">WE CANNOT GATHER — SO WE RUN AT THE SAME TIME</span></span>
     </div>
     <p style="max-width:720px; color:var(--muted); margin:0 0 22px">
-      世界各地のメンバーが、それぞれの街で、同じ時刻・同じ条件で走る同期型セッション。
-      全セッション共通の鉄則：<strong style="color:var(--ink)">無銭は無謀を意味しない。——自分の体力と相談し、水・補給・帰宅手段を必ず携える。体調不良や悪天候で中止するのも継続の一つの形。</strong>
+      <span class="tx-jp">世界各地のメンバーが、それぞれの街で、同じ時刻・同じ条件で走る同期型セッション。全セッション共通の鉄則：<strong style="color:var(--ink)">無銭は無謀を意味しない。——自分の体力と相談し、水・補給・帰宅手段を必ず携える。体調不良や悪天候で中止するのも継続の一つの形。</strong></span>
       <span class="tx-en">Synchronized sessions in which members around the world run in their own cities, at the same time, under the same conditions. One rule for all sessions: no money does not mean reckless. Consult your own physical condition, and always carry water, fuel, and a way home. Cancelling for poor condition or bad weather is also a form of continuing.</span>
     </p>
-    <p style="max-width:720px; color:var(--muted); margin:0 0 22px">セッションの内容と日時は以下のとおり。詳細はSNSでアナウンスします。<span class="tx-en">The sessions and their schedules are as follows. Details are announced on social media.</span></p>
+    <p style="max-width:720px; color:var(--muted); margin:0 0 22px"><span class="tx-jp">セッションの内容と日時は以下のとおり。詳細はSNSでアナウンスします。</span><span class="tx-en">The sessions and their schedules are as follows. Details are announced on social media.</span></p>
     <div class="session-list">
       <!-- 当面非表示（ストック）：復帰時はこのコメントを外す
       <div class="session"><span class="name">DAY ZERO — LAUNCH RUN</span><span class="when">ローンチ当日 21:00〜 / 24H</span><p>ローンチを記念する、最初の点呼。ローンチから24時間以内に各自の街で、距離は自由に走り、タイトルを「DAY ZERO | 都市 | 距離」で投稿する。第1回の点呼が、そのまま最初のメンバー名簿になる。</p></div>
       -->
-      <div class="session"><span class="name">Asphalt Night Shift</span><span class="when">毎週月曜 20:00〜<span class="h-en">EVERY MONDAY</span></span><p>静まり返った都市を駆け抜ける定例ソロラン。昼間とは違う表情の街を切り開く。<span class="tx-en">A regular solo run through the hushed city. Cutting through streets that show a different face from the daytime.</span></p></div>
-      <div class="session"><span class="name">Midnight Solitary Run</span><span class="when">毎月最終水曜 21:00〜<span class="h-en">LAST WEDNESDAY, MONTHLY</span></span><p>同じ時刻、それぞれの街のアスファルトへ。孤独でありながら世界と同期する1時間。<span class="tx-en">Same time, onto the asphalt of your own city. One hour of solitude, synchronized with the world.</span></p></div>
+      <div class="session"><span class="name">Asphalt Night Shift</span><span class="when"><span class="h-jp">毎週月曜</span> 20:00〜<span class="h-en">EVERY MONDAY</span></span><p><span class="tx-jp">静まり返った都市を駆け抜ける定例ソロラン。昼間とは違う表情の街を切り開く。</span><span class="tx-en">A regular solo run through the hushed city. Cutting through streets that show a different face from the daytime.</span></p></div>
+      <div class="session"><span class="name">Midnight Solitary Run</span><span class="when"><span class="h-jp">毎月最終水曜</span> 21:00〜<span class="h-en">LAST WEDNESDAY, MONTHLY</span></span><p><span class="tx-jp">同じ時刻、それぞれの街のアスファルトへ。孤独でありながら世界と同期する1時間。</span><span class="tx-en">Same time, onto the asphalt of your own city. One hour of solitude, synchronized with the world.</span></p></div>
       <!-- 当面非表示（ストック）：復帰時はこのコメントを外す
       <div class="session"><span class="name">Sufferfest Mileage Week</span><span class="when">毎月第3週</span><p>生活の隙間を縫い、無理のない範囲でどこまで距離を積めるか。自らに静かな課題を課す1週間。</p></div>
       -->
@@ -744,29 +790,29 @@
     <div class="sec-head">
       <span class="sec-num" style="font-size:clamp(24px,3.4vw,36px)">▸</span>
       <h3 class="sec-title" style="font-size:clamp(20px,3vw,30px)">Rules of Engagement</h3>
-      <span class="sec-tag">チームのルール、様式。<span class="h-en">THE TEAM'S RULES AND STYLE</span></span>
+      <span class="sec-tag"><span class="h-jp">チームのルール、様式。</span><span class="h-en">THE TEAM'S RULES AND STYLE</span></span>
     </div>
     <div class="rules-grid">
       <div class="rules-box">
         <h3>THE CODE</h3>
         <div class="sub">守る — MUST</div>
         <ul>
-          <li><b>No Commercial Pride</b><span>ギアは問わない。ギアの値段で人を測らない。</span><span class="tx-en">Gear is not asked. Never measure a person by the price of their gear.</span></li>
-          <li><b>Respect &amp; Flat Hierarchy</b><span>肩書・国籍・年収・速さ・ラン歴で上下を作らない。すべての走者は対等。</span><span class="tx-en">No ranking by title, nationality, income, speed, or running history. All runners are equal.</span></li>
-          <li><b>Safety First</b><span>水・補給・帰宅手段の確保。体調不良時は中止。苦行は強要されるものではない。</span><span class="tx-en">Secure water, fuel, and a way home. Cancel when in poor condition. Austerity is never to be forced on anyone.</span></li>
-          <li><b>Respect the Asphalt</b><span>公道・公園のルールを守る。他人に迷惑をかけないこと。そのうえでトレーニングに集中し、淡々と記録を刻む。</span><span class="tx-en">Follow the rules of public roads and parks. Cause no trouble to others. On that basis, concentrate on training and steadily carve out your records.</span></li>
-          <li><b>Privacy</b><span>プライバシーに配慮する。他人の写真は許可なく公開しない。</span><span class="tx-en">Respect privacy. Never publish photos of others without permission.</span></li>
+          <li><b>No Commercial Pride</b><span class="tx-jp">ギアは問わない。ギアの値段で人を測らない。</span><span class="tx-en">Gear is not asked. Never measure a person by the price of their gear.</span></li>
+          <li><b>Respect &amp; Flat Hierarchy</b><span class="tx-jp">肩書・国籍・年収・速さ・ラン歴で上下を作らない。すべての走者は対等。</span><span class="tx-en">No ranking by title, nationality, income, speed, or running history. All runners are equal.</span></li>
+          <li><b>Safety First</b><span class="tx-jp">水・補給・帰宅手段の確保。体調不良時は中止。苦行は強要されるものではない。</span><span class="tx-en">Secure water, fuel, and a way home. Cancel when in poor condition. Austerity is never to be forced on anyone.</span></li>
+          <li><b>Respect the Asphalt</b><span class="tx-jp">公道・公園のルールを守る。他人に迷惑をかけないこと。そのうえでトレーニングに集中し、淡々と記録を刻む。</span><span class="tx-en">Follow the rules of public roads and parks. Cause no trouble to others. On that basis, concentrate on training and steadily carve out your records.</span></li>
+          <li><b>Privacy</b><span class="tx-jp">プライバシーに配慮する。他人の写真は許可なく公開しない。</span><span class="tx-en">Respect privacy. Never publish photos of others without permission.</span></li>
         </ul>
       </div>
       <div class="rules-box ghost-box">
         <h3>THE STYLE</h3>
         <div class="sub">SNS投稿にあたっての推奨フォーマット— RECOMMENDED, NOT REQUIRED</div>
         <ul>
-          <li><b>Industrial Naming</b><span>日付・都市・距離のみ投稿する。</span><span class="tx-en">Post date, city, and distance only.</span></li>
-          <li><b>Monochrome Visuals</b><span>チームビジュアルの統一性の観点からモノクローム写真を基本とします。</span><span class="tx-en">For the consistency of the team's visuals, monochrome photographs are the standard.</span></li>
-          <li><b>Minimal Captions</b><span>気象条件とデータのみ、あるいは無言を美徳とする——強制ではない。</span><span class="tx-en">Weather conditions and data only — or silence as a virtue. Never mandatory.</span></li>
-          <li><b>Unbranded Gear</b><span>タグ付けは最小限に。ブランドではなく走りで語る姿勢を推奨。</span><span class="tx-en">Keep tagging to a minimum. Speak through your running, not through brands.</span></li>
-          <li><b>Silent Kudos</b><span>言葉を交わさずとも、同じ夜を走る存在への敬意は胸の中に。</span><span class="tx-en">Even without exchanging words, keep respect in your heart for those who run the same night.</span></li>
+          <li><b>Industrial Naming</b><span class="tx-jp">日付・都市・距離のみ投稿する。</span><span class="tx-en">Post date, city, and distance only.</span></li>
+          <li><b>Monochrome Visuals</b><span class="tx-jp">チームビジュアルの統一性の観点からモノクローム写真を基本とします。</span><span class="tx-en">For the consistency of the team's visuals, monochrome photographs are the standard.</span></li>
+          <li><b>Minimal Captions</b><span class="tx-jp">気象条件とデータのみ、あるいは無言を美徳とする——強制ではない。</span><span class="tx-en">Weather conditions and data only — or silence as a virtue. Never mandatory.</span></li>
+          <li><b>Unbranded Gear</b><span class="tx-jp">タグ付けは最小限に。ブランドではなく走りで語る姿勢を推奨。</span><span class="tx-en">Keep tagging to a minimum. Speak through your running, not through brands.</span></li>
+          <li><b>Silent Kudos</b><span class="tx-jp">言葉を交わさずとも、同じ夜を走る存在への敬意は胸の中に。</span><span class="tx-en">Even without exchanging words, keep respect in your heart for those who run the same night.</span></li>
         </ul>
       </div>
     </div>
@@ -790,7 +836,7 @@
       <span>[ 販売物ではありません ]</span>
     </div>
     <p style="max-width:720px; color:var(--muted); margin:0 0 26px">
-      ここに並ぶのは、実際に作られたチームウェアの記録である。チームウェアもまた活動のアーカイブである。
+      <span class="tx-jp">ここに並ぶのは、実際に作られたチームウェアの記録である。チームウェアもまた活動のアーカイブである。</span>
       <span class="tx-en">What is lined up here is a record of team wear that was actually made. Team wear, too, is an archive of the activity.</span>
     </p>
     <!-- 写真は当面1点のみ表示（追加時はこのコメントと style を外し、ストック分のコメントを外す） -->
@@ -893,17 +939,15 @@
       <div class="join-main">
         <h3>Far from home.<br>Broke in pocket.<br>Rich in miles.</h3>
         <p>
-          入会について:苦行無銭は、チームの理念、コンセプトに賛同する方の参加を随時募集しています。参加に、会費も審査も最低距離もありません。本部は Strava クラブ
-          <strong>「苦行無銭 — No Money Running Club」</strong>（Running Only / Public）。
-          思想と物語はこのサイトに、記録と連帯は Strava に。
+          <span class="tx-jp">入会について:苦行無銭は、チームの理念、コンセプトに賛同する方の参加を随時募集しています。参加に、会費も審査も最低距離もありません。本部は Strava クラブ<strong>「苦行無銭 — No Money Running Club」</strong>（Running Only / Public）。思想と物語はこのサイトに、記録と連帯は Strava に。</span>
           <span class="tx-en">About joining: Kugyou Musen welcomes, at any time, those who share the team's philosophy and concept. There is no fee, no screening, and no minimum distance. Headquarters is the Strava club "Kugyou Musen — No Money Running Club" (Running Only / Public). The ideas and the stories live on this site; the records and the solidarity live on Strava.</span>
         </p>
         <ol class="steps">
-          <li>Stravaで<a href="https://strava.app.link/IsecHeEWe8b" target="_blank" rel="noopener">「苦行無銭 — No Money Running Club」</a>を検索し、クラブに参加する（Public・承認不要）<span class="tx-en">Search Strava for "Kugyou Musen — No Money Running Club" and join the club (Public — no approval needed).</span></li>
-          <li>自分の街で走る。距離もペースも自由。命名フォーマットは推奨様式を参照<span class="tx-en">Run in your own city. Distance and pace are free. See the recommended style for the naming format.</span></li>
-          <li>セッションの日は、世界各地のメンバーと同じ時刻にアスファルトへ<span class="tx-en">On session days, take to the asphalt at the same time as members around the world.</span></li>
+          <li><span class="tx-jp">Stravaで<a href="https://strava.app.link/IsecHeEWe8b" target="_blank" rel="noopener">「苦行無銭 — No Money Running Club」</a>を検索し、クラブに参加する（Public・承認不要）</span><span class="tx-en">Search Strava for "Kugyou Musen — No Money Running Club" and join the club (Public — no approval needed).</span></li>
+          <li><span class="tx-jp">自分の街で走る。距離もペースも自由。命名フォーマットは推奨様式を参照</span><span class="tx-en">Run in your own city. Distance and pace are free. See the recommended style for the naming format.</span></li>
+          <li><span class="tx-jp">セッションの日は、世界各地のメンバーと同じ時刻にアスファルトへ</span><span class="tx-en">On session days, take to the asphalt at the same time as members around the world.</span></li>
         </ol>
-        <div class="join-club-link"><a href="https://strava.app.link/IsecHeEWe8b" target="_blank" rel="noopener">STRAVA CLUB — クラブに参加する →</a><span class="h-en">JOIN THE CLUB ON STRAVA</span></div>
+        <div class="join-club-link"><a href="https://strava.app.link/IsecHeEWe8b" target="_blank" rel="noopener">STRAVA CLUB — <span class="h-jp">クラブに参加する</span> →</a><span class="h-en">JOIN THE CLUB ON STRAVA</span></div>
       </div>
       <div class="join-side">
         <div class="base-box">
@@ -915,7 +959,7 @@
         </div>
         <div class="newsletter" id="newsletterBox">
           <h4>// NOISELETTER SUBSCRIPTION</h4>
-          <p>No spam. Only secret meetups and gear drops. 登録は任意。アドレスは配信目的以外に使いません。<span class="tx-en">Subscription is optional. Your address will be used for delivery purposes only.</span></p>
+          <p>No spam. Only secret meetups and gear drops. <span class="tx-jp">登録は任意。アドレスは配信目的以外に使いません。</span><span class="tx-en">Subscription is optional. Your address will be used for delivery purposes only.</span></p>
           <form class="news-form" id="newsForm">
             <label class="mono" for="newsEmail" style="position:absolute; left:-9999px">メールアドレス</label>
             <input id="newsEmail" type="email" required placeholder="your@email" autocomplete="email" />
@@ -931,9 +975,9 @@
     <div class="sec-head">
       <span class="sec-num">06</span>
       <h2 class="sec-title">"Free" Paper Archive</h2>
-      <span class="sec-tag">WEBマガジン — バックナンバー<span class="h-en">WEB MAGAZINE — BACK ISSUES</span></span>
+      <span class="sec-tag"><span class="h-jp">WEBマガジン — バックナンバー</span><span class="h-en">WEB MAGAZINE — BACK ISSUES</span></span>
     </div>
-    <p class="mag-lead">月刊WEBマガジン「"FREE" PAPER」のバックナンバー。表紙を押すと、その号をPDFで読める。<span class="tx-en">Back issues of the monthly web magazine "FREE" PAPER. Tap a cover to read that issue as a PDF.</span></p>
+    <p class="mag-lead"><span class="tx-jp">月刊WEBマガジン「"FREE" PAPER」のバックナンバー。表紙を押すと、その号をPDFで読める。</span><span class="tx-en">Back issues of the monthly web magazine "FREE" PAPER. Tap a cover to read that issue as a PDF.</span></p>
     <div class="mag-row">
       <figure class="mag-item">
         <a href="magazine/FREE-PAPER-vol001.pdf" target="_blank" rel="noopener">
@@ -955,7 +999,7 @@
       </figure>
     </div>
     <!-- TODO: 「WEBマガジンで読む」のリンク先は仮置き。WEBマガジン（Muse artifact「free-paper」）は未共有で公開URLがまだ無いため、共有で公開URLが発行され次第、この href をそのURLに差し替える。 -->
-    <p class="mag-weblink"><a href="#magazine">WEBマガジンで読む →</a><span class="h-en">READ THE WEB MAGAZINE</span></p>
+    <p class="mag-weblink"><a class="h-jp" href="#magazine">WEBマガジンで読む →</a><span class="h-en">READ THE WEB MAGAZINE</span></p>
   </section>
 </main>
 
@@ -963,7 +1007,7 @@
 <div class="spotify-quiet">
   <div class="spotify-quiet-label">PLAYLIST — SPOTIFY</div>
   <iframe src="https://open.spotify.com/embed/playlist/3887MDb3kNZVjKp2g95Eeb?utm_source=generator&theme=0" width="100%" height="152" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="&quot;SHARE&quot; RUNNING MUSIC — Spotifyプレイリスト"></iframe>
-  <p class="spotify-note">掲載している楽曲は、ランニング時のリズムや純粋な音楽的好みによって選曲したものです。曲名や歌詞に含まれる表現・メッセージは当クラブの思想や主張を反映するものではなく、特定の個人・団体への批判や賛同の意図はありません。<span class="tx-en">The tracks featured here were selected purely for their rhythm while running and for personal musical taste. The expressions and messages contained in song titles and lyrics do not reflect the ideas or positions of this club, and are not intended as criticism of, or endorsement of, any specific individual or organization.</span></p>
+  <p class="spotify-note"><span class="tx-jp">掲載している楽曲は、ランニング時のリズムや純粋な音楽的好みによって選曲したものです。曲名や歌詞に含まれる表現・メッセージは当クラブの思想や主張を反映するものではなく、特定の個人・団体への批判や賛同の意図はありません。</span><span class="tx-en">The tracks featured here were selected purely for their rhythm while running and for personal musical taste. The expressions and messages contained in song titles and lyrics do not reflect the ideas or positions of this club, and are not intended as criticism of, or endorsement of, any specific individual or organization.</span></p>
 </div>
 
 <footer>
@@ -1042,6 +1086,25 @@
     done.textContent = 'SUBSCRIBED TO THE NOISE.';
     newsForm.replaceWith(done);
   });
+
+  /* Language switch (initial mode was set by the inline script in <head>) */
+  var langBtns = Array.prototype.slice.call(document.querySelectorAll('[data-set-lang]'));
+  function syncLangBtns(){
+    var cur = document.documentElement.getAttribute('data-lang') || 'jp';
+    langBtns.forEach(function(b){
+      b.setAttribute('aria-pressed', b.getAttribute('data-set-lang') === cur ? 'true' : 'false');
+    });
+  }
+  langBtns.forEach(function(b){
+    b.addEventListener('click', function(){
+      var lang = b.getAttribute('data-set-lang');
+      document.documentElement.setAttribute('data-lang', lang);
+      document.documentElement.setAttribute('lang', lang === 'jp' ? 'ja' : 'en');
+      try { window.localStorage.setItem('km-lang', lang); } catch (e) {}
+      syncLangBtns();
+    });
+  });
+  syncLangBtns();
 })();
 </script>
 </body>
