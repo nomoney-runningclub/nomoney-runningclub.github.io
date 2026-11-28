@@ -20,17 +20,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=IBM+Plex+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet" />
 <script>
 /* Language mode — decided before first paint.
-   Priority: ?lang=jp|en  >  localStorage("km-lang")  >  browser language (ja* -> jp, else en). */
+   Priority: ?lang=jp|en|vi|zh-hans|zh-hant|ko  >  localStorage("km-lang")  >  browser language
+   (ja* -> jp, vi* -> vi, ko* -> ko, zh-TW/zh-HK/zh-MO/zh-Hant* -> zh-hant, other zh* -> zh-hans, else en). */
 (function(){
+  var langs = ['jp','en','vi','zh-hans','zh-hant','ko'];
+  var htmlLang = {jp:'ja', en:'en', vi:'vi', 'zh-hans':'zh-Hans', 'zh-hant':'zh-Hant', ko:'ko'};
   var lang = null;
-  var m = /[?&]lang=(jp|en)(?=&|#|$)/.exec(window.location.search);
+  var m = /[?&]lang=(jp|en|vi|zh-hans|zh-hant|ko)(?=&|#|$)/.exec(window.location.search);
   if (m) lang = m[1];
   if (!lang) { try { lang = window.localStorage.getItem('km-lang'); } catch (e) {} }
-  if (lang !== 'jp' && lang !== 'en') {
-    lang = (window.navigator.language || '').toLowerCase().indexOf('ja') === 0 ? 'jp' : 'en';
+  if (langs.indexOf(lang) === -1) {
+    var b = (window.navigator.language || '').toLowerCase();
+    if (b.indexOf('ja') === 0) lang = 'jp';
+    else if (b.indexOf('vi') === 0) lang = 'vi';
+    else if (b.indexOf('ko') === 0) lang = 'ko';
+    else if (b.indexOf('zh') === 0) lang = /zh[-_](tw|hk|mo|hant)/.test(b) ? 'zh-hant' : 'zh-hans';
+    else lang = 'en';
   }
   document.documentElement.setAttribute('data-lang', lang);
-  document.documentElement.setAttribute('lang', lang === 'jp' ? 'ja' : 'en');
+  document.documentElement.setAttribute('lang', htmlLang[lang]);
 })();
 </script>
 <style>
@@ -169,6 +177,52 @@
     nav.main{order:3; width:100%}
     .topbar-in{gap:10px}
   }
+
+  /* ---------- 6-language display (2026-11-28) ----------
+     JP keeps the current bilingual layout (JP primary + EN subordinate).
+     EN / VI / ZH-HANS / ZH-HANT / KO show only that language; Japanese
+     text is hidden except for fixed brand elements (logo, ¥0, fixed copy). */
+  .lg-en,.lg-vi,.lg-zh-hans,.lg-zh-hant,.lg-ko{display:none}
+  .tx-vi,.tx-zh-hans,.tx-zh-hant,.tx-ko{display:block}
+  .vi-only,.zh-hans-only,.zh-hant-only,.ko-only{display:none}
+  html[data-lang="en"] .lg-jp{display:none}
+  html[data-lang="en"] .lg-en{display:revert}
+  html[data-lang="vi"] :is(.lg-jp,.lg-en){display:none}
+  html[data-lang="vi"] .lg-vi{display:revert}
+  html[data-lang="zh-hans"] :is(.lg-jp,.lg-en){display:none}
+  html[data-lang="zh-hans"] .lg-zh-hans{display:revert}
+  html[data-lang="zh-hant"] :is(.lg-jp,.lg-en){display:none}
+  html[data-lang="zh-hant"] .lg-zh-hant{display:revert}
+  html[data-lang="ko"] :is(.lg-jp,.lg-en){display:none}
+  html[data-lang="ko"] .lg-ko{display:revert}
+  html[data-lang="vi"] .vi-only{display:revert}
+  html[data-lang="zh-hans"] .zh-hans-only{display:revert}
+  html[data-lang="zh-hant"] .zh-hant-only{display:revert}
+  html[data-lang="ko"] .ko-only{display:revert}
+  html[data-lang="jp"] :is(.tx-vi,.tx-zh-hans,.tx-zh-hant,.tx-ko){display:none}
+  html[data-lang="en"] :is(.tx-jp,.tx-vi,.tx-zh-hans,.tx-zh-hant,.tx-ko){display:none}
+  html[data-lang="vi"] :is(.tx-jp,.tx-en,.tx-zh-hans,.tx-zh-hant,.tx-ko){display:none}
+  html[data-lang="zh-hans"] :is(.tx-jp,.tx-en,.tx-vi,.tx-zh-hant,.tx-ko){display:none}
+  html[data-lang="zh-hant"] :is(.tx-jp,.tx-en,.tx-vi,.tx-zh-hans,.tx-ko){display:none}
+  html[data-lang="ko"] :is(.tx-jp,.tx-en,.tx-vi,.tx-zh-hans,.tx-zh-hant){display:none}
+  html[data-lang="jp"] :is(.h-vi,.h-zh-hans,.h-zh-hant,.h-ko){display:none}
+  html[data-lang="en"] :is(.h-jp,.h-vi,.h-zh-hans,.h-zh-hant,.h-ko){display:none}
+  html[data-lang="vi"] :is(.h-jp,.h-en,.h-zh-hans,.h-zh-hant,.h-ko){display:none}
+  html[data-lang="zh-hans"] :is(.h-jp,.h-en,.h-vi,.h-zh-hant,.h-ko){display:none}
+  html[data-lang="zh-hant"] :is(.h-jp,.h-en,.h-vi,.h-zh-hans,.h-ko){display:none}
+  html[data-lang="ko"] :is(.h-jp,.h-en,.h-vi,.h-zh-hans,.h-zh-hant){display:none}
+  html[data-lang="vi"] .en-only, html[data-lang="zh-hans"] .en-only, html[data-lang="zh-hant"] .en-only, html[data-lang="ko"] .en-only{display:none}
+  html[data-lang="jp"] .en-only-manifesto{display:none}
+  html[data-lang="vi"] :is(p,li):has(> .tx-vi),
+  html[data-lang="zh-hans"] :is(p,li):has(> .tx-zh-hans),
+  html[data-lang="zh-hant"] :is(p,li):has(> .tx-zh-hant),
+  html[data-lang="ko"] :is(p,li):has(> .tx-ko){display:flex; flex-direction:column}
+  html[data-lang="vi"] :is(p,li):has(> .tx-vi) > br,
+  html[data-lang="zh-hans"] :is(p,li):has(> .tx-zh-hans) > br,
+  html[data-lang="zh-hant"] :is(p,li):has(> .tx-zh-hant) > br,
+  html[data-lang="ko"] :is(p,li):has(> .tx-ko) > br{display:none}
+  html[data-lang="vi"] .tx-vi, html[data-lang="zh-hans"] .tx-zh-hans,
+  html[data-lang="zh-hant"] .tx-zh-hant, html[data-lang="ko"] .tx-ko{order:1; font-size:1em; color:inherit; margin-top:0}
   @media (max-width:480px){
     .brand .yen{font-size:24px}
     .brand .jp{font-size:17px}
@@ -180,18 +234,22 @@
 
 <header class="topbar">
   <div class="topbar-in">
-    <a class="brand" href="index.html" aria-label="NO MONEY RUNNING CLUB トップ">
+    <a class="brand" href="index.html" aria-label="NO MONEY RUNNING CLUB トップ" data-aria-jp="NO MONEY RUNNING CLUB トップ" data-aria-en="NO MONEY RUNNING CLUB — Top" data-aria-vi="NO MONEY RUNNING CLUB — Trang đầu" data-aria-zh-hans="NO MONEY RUNNING CLUB — 首页" data-aria-zh-hant="NO MONEY RUNNING CLUB — 首頁" data-aria-ko="NO MONEY RUNNING CLUB — 맨 위">
       <span class="yen">¥0</span>
       <span class="jp">苦行無銭</span>
       <span class="club-name">NO MONEY RUNNING CLUB</span>
     </a>
-    <nav class="main" aria-label="メインナビゲーション">
-      <a href="index.html">← TOP</a>
+    <nav class="main" aria-label="メインナビゲーション" data-aria-jp="メインナビゲーション" data-aria-en="Main navigation" data-aria-vi="Điều hướng chính" data-aria-zh-hans="主导航" data-aria-zh-hant="主導覽" data-aria-ko="주요 탐색">
+      <a href="index.html"><span class="lg-jp">← TOP</span><span class="lg-en">← TOP</span><span class="lg-vi">← ĐẦU TRANG</span><span class="lg-zh-hans">← 回到顶部</span><span class="lg-zh-hant">← 回到頂部</span><span class="lg-ko">← 맨 위로</span></a>
     </nav>
     <div class="top-actions">
-      <div class="lang-switch" role="group" aria-label="言語切替 / Language">
+      <div class="lang-switch" role="group" aria-label="言語切替 / Language" data-aria-jp="言語切替 / Language" data-aria-en="Language" data-aria-vi="Ngôn ngữ" data-aria-zh-hans="语言" data-aria-zh-hant="語言" data-aria-ko="언어">
         <button type="button" data-set-lang="jp" aria-pressed="true">JP</button>
         <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+        <button type="button" data-set-lang="vi" aria-pressed="false">VI</button>
+        <button type="button" data-set-lang="zh-hans" aria-pressed="false">简体</button>
+        <button type="button" data-set-lang="zh-hant" aria-pressed="false">繁體</button>
+        <button type="button" data-set-lang="ko" aria-pressed="false">한국어</button>
       </div>
     </div>
   </div>
@@ -200,71 +258,71 @@
 <main>
   <div class="phil">
     <div class="sec-head">
-      <h1 class="sec-title">Zero-Budget Philosophy</h1>
-      <span class="sec-tag">[ THE CODE — 行動規範 ]</span>
+      <h1 class="sec-title"><span class="lg-jp">Zero-Budget Philosophy</span><span class="lg-en">Zero-Budget Philosophy</span><span class="lg-vi">Triết lý Không tiền</span><span class="lg-zh-hans">零预算哲学</span><span class="lg-zh-hant">零預算哲學</span><span class="lg-ko">무전 철학</span></h1>
+      <span class="sec-tag"><span class="lg-jp">[ THE CODE — 行動規範 ]</span><span class="lg-en">[ THE CODE ]</span><span class="lg-vi">[ THE CODE — BỘ QUY TẮC ]</span><span class="lg-zh-hans">[ THE CODE — 行为准则 ]</span><span class="lg-zh-hant">[ THE CODE — 行為準則 ]</span><span class="lg-ko">[ THE CODE — 행동 규범 ]</span></span>
     </div>
 
-    <div class="code-grid" aria-label="行動規範 THE CODE">
+    <div class="code-grid" aria-label="行動規範 THE CODE" data-aria-jp="行動規範 THE CODE" data-aria-en="Code of conduct — THE CODE" data-aria-vi="Quy tắc ứng xử — THE CODE" data-aria-zh-hans="行为规范 — THE CODE" data-aria-zh-hant="行為規範 — THE CODE" data-aria-ko="행동 규범 — THE CODE">
       <div class="code-item">
-        <h4><span class="en-sm">ZERO-BUDGET PHILOSOPHY</span>無銭の美学</h4>
-        <p><span class="tx-jp">高額なギアは意志の補強にならない。どんなウェアであろうと、アスファルトの上ではすべてのランナーが平等であり、試されるのは意志のみ。</span><span class="tx-en">Expensive gear does not reinforce the will. Whatever you wear, on the asphalt every runner is equal, and the only thing tested is the will.</span></p>
+        <h4><span class="lg-jp">&lt;span class="en-sm"&gt;ZERO-BUDGET PHILOSOPHY&lt;/span&gt;無銭の美学</span><span class="lg-en">Zero-Budget Philosophy</span><span class="lg-vi">Mỹ học không tiền</span><span class="lg-zh-hans">无钱之美</span><span class="lg-zh-hant">無錢之美</span><span class="lg-ko">무전의 미학</span></h4>
+        <p><span class="tx-jp">高額なギアは意志の補強にならない。どんなウェアであろうと、アスファルトの上ではすべてのランナーが平等であり、試されるのは意志のみ。</span><span class="tx-en">Expensive gear does not reinforce the will. Whatever you wear, on the asphalt every runner is equal, and the only thing tested is the will.</span><span class="tx-vi">Trang bị đắt tiền không làm ý chí mạnh thêm. Dù mặc gì đi nữa, trên mặt đường mọi người chạy đều bình đẳng, và thứ duy nhất bị thử thách là ý chí.</span><span class="tx-zh-hans">昂贵的装备无法强化意志。无论穿什么，在沥青路面上所有跑者一律平等，唯一被考验的只有意志。</span><span class="tx-zh-hant">昂貴的裝備無法強化意志。無論穿什麼，在柏油路上所有跑者一律平等，唯一被考驗的只有意志。</span><span class="tx-ko">비싼 기어는 의지를 보강하지 못한다. 무엇을 입든, 아스팔트 위에서는 모든 러너가 평등하고, 시험받는 것은 의지뿐이다.</span></p>
       </div>
       <div class="code-item">
-        <h4><span class="en-sm">RUN IN SILENCE, RUN ALONE</span>黙々と駆け抜ける</h4>
-        <p><span class="tx-jp">一人で構わない。集団である必要はない。日本の夜道でも世界のどこかでも、基本は「自分 vs アスファルト」。静寂の中にだけ、本当の対話がある。</span><span class="tx-en">Alone is fine. There is no need to be a group. On a night road in Japan, or anywhere in the world, the basics are the same: you vs. the asphalt. True dialogue exists only within silence.</span></p>
+        <h4><span class="lg-jp">&lt;span class="en-sm"&gt;RUN IN SILENCE, RUN ALONE&lt;/span&gt;黙々と駆け抜ける</span><span class="lg-en">Run in Silence, Run Alone</span><span class="lg-vi">Lặng lẽ chạy qua</span><span class="lg-zh-hans">默默驰骋</span><span class="lg-zh-hant">默默馳騁</span><span class="lg-ko">묵묵히 내달리다</span></h4>
+        <p><span class="tx-jp">一人で構わない。集団である必要はない。日本の夜道でも世界のどこかでも、基本は「自分 vs アスファルト」。静寂の中にだけ、本当の対話がある。</span><span class="tx-en">Alone is fine. There is no need to be a group. On a night road in Japan, or anywhere in the world, the basics are the same: you vs. the asphalt. True dialogue exists only within silence.</span><span class="tx-vi">Một mình cũng được. Không cần phải là một nhóm. Dù trên đường đêm ở Nhật Bản hay ở bất cứ đâu trên thế giới, điều cơ bản vẫn vậy: mình đối mặt với mặt đường. Đối thoại thật sự chỉ có trong tĩnh lặng.</span><span class="tx-zh-hans">一个人也可以。不必成群。无论是在日本的夜路，还是在世界上的任何地方，基本都一样：「自己 vs 沥青路面」。真正的对话，只存在于寂静之中。</span><span class="tx-zh-hant">一個人也可以。不必成群。無論是在日本的夜路，還是在世界上的任何地方，基本都一樣：「自己 vs 柏油路」。真正的對話，只存在於寂靜之中。</span><span class="tx-ko">혼자여도 된다. 집단일 필요가 없다. 일본의 밤길이든 세계 어디든, 기본은 같다: "나 vs 아스팔트". 진정한 대화는 침묵 속에 있을 뿐이다.</span></p>
       </div>
       <div class="code-item">
-        <h4><span class="en-sm">NO PRIVILEGE, NO EXCUSES</span>言い訳の排除</h4>
-        <p><span class="tx-jp">天候を理由にしない。無銭もやらない理由にはならない。(ただし体調不良は別—中止も切り上げもまた継続の一つの形)</span><span class="tx-en">Weather is no excuse. Having no money is no reason not to run, either. (Poor physical condition is another matter — stopping, and cutting a run short, are also forms of continuing.)</span></p>
+        <h4><span class="lg-jp">&lt;span class="en-sm"&gt;NO PRIVILEGE, NO EXCUSES&lt;/span&gt;言い訳の排除</span><span class="lg-en">No Privilege, No Excuses</span><span class="lg-vi">Loại bỏ mọi lời bào chữa</span><span class="lg-zh-hans">摒弃借口</span><span class="lg-zh-hant">摒棄藉口</span><span class="lg-ko">변명의 배제</span></h4>
+        <p><span class="tx-jp">天候を理由にしない。無銭もやらない理由にはならない。(ただし体調不良は別—中止も切り上げもまた継続の一つの形)</span><span class="tx-en">Weather is no excuse. Having no money is no reason not to run, either. (Poor physical condition is another matter — stopping, and cutting a run short, are also forms of continuing.)</span><span class="tx-vi">Đừng lấy thời tiết làm lý do. Không tiền cũng không phải lý do để không chạy. (Nhưng sức khỏe không tốt là chuyện khác — dừng lại hay rút ngắn buổi chạy cũng là một cách để tiếp tục.)</span><span class="tx-zh-hans">不以天气为借口。无钱也不是不跑的理由。（但身体不适另当别论——中止或提前结束，同样是继续的一种形式。）</span><span class="tx-zh-hant">不以天氣為藉口。無錢也不是不跑的理由。（但身體不適另當別論——中止或提前結束，同樣是繼續的一種形式。）</span><span class="tx-ko">날씨를 핑계로 삼지 않는다. 무전도 달리지 않을 이유가 되지 않는다. (단, 몸이 안 좋은 경우는 별개 — 중단도, 일찍 마치는 것도 계속하는 한 가지 형태다.)</span></p>
       </div>
       <div class="code-item">
-        <h4><span class="en-sm">OUTCAST PRIDE</span>街のエトランゼとしての誇り</h4>
-        <p><span class="tx-jp">見知らぬ街、慣れない言語。それでも重力とアスファルトは平等。このチームは異邦人も歓迎する。</span><span class="tx-en">An unfamiliar city, an unfamiliar language. Even so, gravity and asphalt are equal. This team welcomes strangers, too.</span></p>
+        <h4><span class="lg-jp">&lt;span class="en-sm"&gt;OUTCAST PRIDE&lt;/span&gt;街のエトランゼとしての誇り</span><span class="lg-en">Outcast Pride</span><span class="lg-vi">Niềm tự hào của kẻ xa lạ nơi phố thị</span><span class="lg-zh-hans">身为城市异乡人的骄傲</span><span class="lg-zh-hant">身為城市異鄉人的驕傲</span><span class="lg-ko">도시의 이방인으로서의 자부심</span></h4>
+        <p><span class="tx-jp">見知らぬ街、慣れない言語。それでも重力とアスファルトは平等。このチームは異邦人も歓迎する。</span><span class="tx-en">An unfamiliar city, an unfamiliar language. Even so, gravity and asphalt are equal. This team welcomes strangers, too.</span><span class="tx-vi">Thành phố xa lạ, ngôn ngữ chưa quen. Vậy mà trọng lực và mặt đường vẫn công bằng. Đội này cũng chào đón những người xa lạ.</span><span class="tx-zh-hans">陌生的城市，不习惯的语言。即便如此，重力与沥青路面依然平等。这支队伍也欢迎异乡人。</span><span class="tx-zh-hant">陌生的城市，不習慣的語言。即便如此，重力與柏油路依然平等。這支隊伍也歡迎異鄉人。</span><span class="tx-ko">낯선 도시, 익숙지 않은 언어. 그래도 중력과 아스팔트는 평등하다. 이 팀은 이방인도 환영한다.</span></p>
       </div>
       <div class="code-item">
-        <h4><span class="en-sm">ANTI-COMMERCIAL STANCE</span>商業主義からの離脱</h4>
-        <p><span class="tx-jp">走行距離は買うことができない。ギアの値段はランナーの価値を決めない。誇示ではなく、記録で語れ。</span><span class="tx-en">Distance cannot be bought. The price of gear does not decide a runner's worth. Speak with records, not with showing off.</span></p>
+        <h4><span class="lg-jp">&lt;span class="en-sm"&gt;ANTI-COMMERCIAL STANCE&lt;/span&gt;商業主義からの離脱</span><span class="lg-en">Anti-Commercial Stance</span><span class="lg-vi">Thoát khỏi chủ nghĩa thương mại</span><span class="lg-zh-hans">脱离商业主义</span><span class="lg-zh-hant">脫離商業主義</span><span class="lg-ko">상업주의로부터의 이탈</span></h4>
+        <p><span class="tx-jp">走行距離は買うことができない。ギアの値段はランナーの価値を決めない。誇示ではなく、記録で語れ。</span><span class="tx-en">Distance cannot be bought. The price of gear does not decide a runner's worth. Speak with records, not with showing off.</span><span class="tx-vi">Quãng đường không thể mua được. Giá tiền trang bị không quyết định giá trị của người chạy. Hãy nói bằng bản ghi, chứ không phải bằng phô trương.</span><span class="tx-zh-hans">跑步里程是买不来的。装备的价格决定不了跑者的价值。不靠炫耀，凭记录说话。</span><span class="tx-zh-hant">跑步里程是買不來的。裝備的價格決定不了跑者的價值。不靠炫耀，憑記錄說話。</span><span class="tx-ko">달린 거리는 살 수 없다. 기어의 값이 러너의 가치를 정하지 않는다. 과시가 아니라 기록으로 말하라.</span></p>
       </div>
       <div class="code-item">
-        <h4><span class="en-sm">ABSOLUTE SELF-DISCIPLINE</span>絶対的な自己規律</h4>
-        <p><span class="tx-jp">他人の「いいね」で満たされるな。Kudosは義務ではない。誰に見られていなくとも、己の定めた美学を裏切らない。</span><span class="tx-en">Do not let other people's "likes" fill you. Kudos are not an obligation. Even when no one is watching, never betray the aesthetics you have set for yourself.</span></p>
+        <h4><span class="lg-jp">&lt;span class="en-sm"&gt;ABSOLUTE SELF-DISCIPLINE&lt;/span&gt;絶対的な自己規律</span><span class="lg-en">Absolute Self-Discipline</span><span class="lg-vi">Kỷ luật tự giác tuyệt đối</span><span class="lg-zh-hans">绝对的自律</span><span class="lg-zh-hant">絕對的自律</span><span class="lg-ko">절대적인 자기 규율</span></h4>
+        <p><span class="tx-jp">他人の「いいね」で満たされるな。Kudosは義務ではない。誰に見られていなくとも、己の定めた美学を裏切らない。</span><span class="tx-en">Do not let other people's "likes" fill you. Kudos are not an obligation. Even when no one is watching, never betray the aesthetics you have set for yourself.</span><span class="tx-vi">Đừng để những lượt "thích" của người khác lấp đầy mình. Kudos không phải là nghĩa vụ. Dù không ai nhìn thấy, cũng đừng phản bội mỹ học mà mình đã đặt ra.</span><span class="tx-zh-hans">不要让别人的「赞」来填满自己。Kudos不是义务。即使无人注视，也不要背叛自己定下的美学。</span><span class="tx-zh-hant">不要讓別人的「讚」來填滿自己。Kudos不是義務。即使無人注視，也不要背叛自己定下的美學。</span><span class="tx-ko">타인의 "좋아요"로 채워지지 마라. Kudos는 의무가 아니다. 아무도 보지 않더라도, 자신이 정한 미학을 배신하지 않는다.</span></p>
       </div>
       <div class="code-item">
-        <h4><span class="en-sm">NO PACE PRIDE</span>タイム至上主義の撤廃</h4>
-        <p><span class="tx-jp">速さを競う場ではない。過酷な条件のもと淡々と積み上げた距離と、休んで戻ってきた回数こそを称える。競うべきは昨日の己。</span><span class="tx-en">This is not a place to compete on speed. What we honor is the distance steadily built under harsh conditions, and the number of times you rested and came back. The one to compete with is yesterday's self.</span></p>
+        <h4><span class="lg-jp">&lt;span class="en-sm"&gt;NO PACE PRIDE&lt;/span&gt;タイム至上主義の撤廃</span><span class="lg-en">No Pace Pride</span><span class="lg-vi">Bãi bỏ chủ nghĩa sùng bái thành tích</span><span class="lg-zh-hans">废除唯成绩论</span><span class="lg-zh-hant">廢除唯成績論</span><span class="lg-ko">타임 지상주의의 폐지</span></h4>
+        <p><span class="tx-jp">速さを競う場ではない。過酷な条件のもと淡々と積み上げた距離と、休んで戻ってきた回数こそを称える。競うべきは昨日の己。</span><span class="tx-en">This is not a place to compete on speed. What we honor is the distance steadily built under harsh conditions, and the number of times you rested and came back. The one to compete with is yesterday's self.</span><span class="tx-vi">Đây không phải nơi để thi tốc độ. Điều chúng tôi trân trọng là quãng đường lặng lẽ tích lũy trong điều kiện khắc nghiệt, và số lần nghỉ ngơi rồi quay trở lại. Đối thủ cần vượt qua là chính mình của ngày hôm qua.</span><span class="tx-zh-hans">这里不是比拼速度的地方。我们赞颂的，是在严苛条件下淡淡积攒的距离，以及休息后重新归来的次数。应当较量的，是昨天的自己。</span><span class="tx-zh-hant">這裡不是比拼速度的地方。我們讚頌的，是在嚴苛條件下淡淡積攢的距離，以及休息後重新歸來的次數。應當較量的，是昨天的自己。</span><span class="tx-ko">이곳은 속도를 겨루는 곳이 아니다. 우리가 기리는 것은 가혹한 조건 아래 담담히 쌓아 올린 거리와, 쉬었다가 돌아온 횟수다. 겨뤄야 할 상대는 어제의 자신이다.</span></p>
       </div>
       <div class="code-item">
-        <h4><span class="en-sm">UNFILTERED RECORDS</span>失敗ログの無削除</h4>
-        <p><span class="tx-jp">途中で脚が止まった記録も消す必要はない。無傷の栄光より、打ちのめされた葛藤のログにこそ真実が宿る。</span><span class="tx-en">There is no need to erase a record where your legs stopped midway. Truth lives not in unscarred glory, but in the log of being beaten down and struggling through.</span></p>
+        <h4><span class="lg-jp">&lt;span class="en-sm"&gt;UNFILTERED RECORDS&lt;/span&gt;失敗ログの無削除</span><span class="lg-en">Unfiltered Records</span><span class="lg-vi">Không xóa nhật ký thất bại</span><span class="lg-zh-hans">失败记录不删除</span><span class="lg-zh-hant">失敗記錄不刪除</span><span class="lg-ko">실패 로그 무삭제</span></h4>
+        <p><span class="tx-jp">途中で脚が止まった記録も消す必要はない。無傷の栄光より、打ちのめされた葛藤のログにこそ真実が宿る。</span><span class="tx-en">There is no need to erase a record where your legs stopped midway. Truth lives not in unscarred glory, but in the log of being beaten down and struggling through.</span><span class="tx-vi">Không cần xóa bản ghi mà đôi chân đã dừng lại giữa chừng. Sự thật không nằm trong vinh quang không tì vết, mà trong bản ghi của những lần bị đánh gục và vật lộn.</span><span class="tx-zh-hans">中途双腿停下的记录，也无需删除。真实不在无伤的荣耀里，而在被击倒、挣扎前行的记录之中。</span><span class="tx-zh-hant">中途雙腿停下的記錄，也無需刪除。真實不在無傷的榮耀裡，而在被擊倒、掙扎前行的記錄之中。</span><span class="tx-ko">도중에 다리가 멈춘 기록도 지울 필요는 없다. 진실은 흠 없는 영광이 아니라, 두들겨 맞고 몸부림친 기록 속에 있다.</span></p>
       </div>
     </div>
 
     <div class="safety">
-      <div class="mark">¥0 ≠<br>無謀</div>
+      <div class="mark"><span class="lg-jp">¥0 ≠&lt;br&gt;無謀</span><span class="lg-en">¥0 ≠&lt;br&gt;RECKLESS</span><span class="lg-vi">¥0 ≠&lt;br&gt;LIỀU LĨNH</span><span class="lg-zh-hans">¥0 ≠&lt;br&gt;鲁莽</span><span class="lg-zh-hant">¥0 ≠&lt;br&gt;魯莽</span><span class="lg-ko">¥0 ≠&lt;br&gt;무모</span></div>
       <div>
         <p><span class="tx-jp"><strong>トレーニングにあたり、水・補給・帰宅手段は携える。苦行は自ら選ぶものであり、強要ではありません。</strong>歩くことも休息も中止もまた継続の一つの形です。</span>
-        <span class="tx-en">SUFFERING IS SELF-CHOSEN — NEVER FORCED ON OTHERS. ANY DISTANCE COUNTS. WALKING COUNTS. RESTING IS NOT QUITTING.</span></p>
+        <span class="tx-en">SUFFERING IS SELF-CHOSEN — NEVER FORCED ON OTHERS. ANY DISTANCE COUNTS. WALKING COUNTS. RESTING IS NOT QUITTING.</span><span class="tx-vi"><strong>Khi tập luyện, hãy mang theo nước, đồ ăn tiếp sức và phương tiện về nhà. Khổ hạnh là thứ mình tự chọn, không phải thứ bị ép buộc.</strong> Đi bộ cũng được, nghỉ ngơi cũng được, dừng lại cũng là một cách để tiếp tục.</span><span class="tx-zh-hans"><strong>训练时，请带上水、补给和回家的手段。苦行是自己选择的，绝不是强加的。</strong>走路也好，休息也好，中止也好，都是继续的一种形式。</span><span class="tx-zh-hant"><strong>訓練時，請帶上水、補給和回家的手段。苦行是自己選擇的，絕不是強加的。</strong>走路也好，休息也好，中止也好，都是繼續的一種形式。</span><span class="tx-ko"><strong>훈련할 때는 물과 보급식, 귀가 수단을 챙긴다. 고행은 스스로 선택하는 것이지, 강요되는 것이 아니다.</strong> 걷는 것도, 쉬는 것도, 중단하는 것도 계속하는 한 가지 형태다.</span></p>
       </div>
     </div>
 
     <div class="outcast">
       <div class="card">
-        <div class="en-line">“Far from home.<br>True to the asphalt.”</div>
-        <p>故郷から遠く離れても、アスファルトに対しては嘘をつかない。異国の地で走る者の、静かな誓い。</p>
+        <div class="en-line"><span class="lg-jp">“Far from home.&lt;br&gt;True to the asphalt.”</span><span class="lg-en">“Far from home.&lt;br&gt;True to the asphalt.”</span><span class="lg-vi">“Xa quê hương.&lt;br&gt;Nhưng thật lòng với mặt đường.”</span><span class="lg-zh-hans">“远离故乡。&lt;br&gt;对沥青路面真诚以待。”</span><span class="lg-zh-hant">“遠離故鄉。&lt;br&gt;對柏油路真誠以待。”</span><span class="lg-ko">“고향에서 멀리.&lt;br&gt;그러나 아스팔트에는 진실하게.”</span></div>
+        <p><span class="lg-jp">故郷から遠く離れても、アスファルトに対しては嘘をつかない。異国の地で走る者の、静かな誓い。</span><span class="lg-en">Even far from home, I never lie to the asphalt. A quiet vow of one who runs on foreign soil.</span><span class="lg-vi">Dù xa quê hương, tôi cũng không bao giờ dối mặt đường. Lời thề lặng lẽ của người chạy trên đất khách.</span><span class="lg-zh-hans">即使远离故乡，也不对沥青路面撒谎。这是在异国他乡奔跑之人的静静誓言。</span><span class="lg-zh-hant">即使遠離故鄉，也不對柏油路撒謊。這是在異國他鄉奔跑之人的靜靜誓言。</span><span class="lg-ko">고향에서 멀리 떨어져도, 아스팔트에는 거짓말을 하지 않는다. 이국 땅에서 달리는 이의 조용한 맹세.</span></p>
       </div>
       <div class="card">
-        <div class="en-line">“Broke student,<br>rich in miles.”</div>
-        <p>財布は空っぽでも、走行距離では富豪だ。</p>
+        <div class="en-line"><span class="lg-jp">“Broke student,&lt;br&gt;rich in miles.”</span><span class="lg-en">“Broke student,&lt;br&gt;rich in miles.”</span><span class="lg-vi">“Sinh viên cháy túi,&lt;br&gt;giàu có về dặm đường.”</span><span class="lg-zh-hans">“囊中羞涩的学生，&lt;br&gt;里程上的富翁。”</span><span class="lg-zh-hant">“囊中羞澀的學生，&lt;br&gt;里程上的富翁。”</span><span class="lg-ko">“주머니는 빈 학생,&lt;br&gt;마일로는 부자.”</span></div>
+        <p><span class="lg-jp">財布は空っぽでも、走行距離では富豪だ。</span><span class="lg-en">Even with an empty wallet, I am rich in miles.</span><span class="lg-vi">Dù ví rỗng, tôi vẫn giàu có về quãng đường đã chạy.</span><span class="lg-zh-hans">钱包空空，跑步里程上却是富翁。</span><span class="lg-zh-hant">錢包空空，跑步里程上卻是富翁。</span><span class="lg-ko">지갑은 비어도, 달린 거리에서는 부자다.</span></p>
       </div>
       <div class="card">
-        <div class="en-line">“No native language<br>needed on the road.”</div>
-        <p>道路の上では母国語はいらない。共通言語は、アスファルトを蹴る音である。</p>
+        <div class="en-line"><span class="lg-jp">“No native language&lt;br&gt;needed on the road.”</span><span class="lg-en">“No native language&lt;br&gt;needed on the road.”</span><span class="lg-vi">“Trên đường,&lt;br&gt;không cần tiếng mẹ đẻ.”</span><span class="lg-zh-hans">“在路上，&lt;br&gt;不需要母语。”</span><span class="lg-zh-hant">“在路上，&lt;br&gt;不需要母語。”</span><span class="lg-ko">“길 위에서는&lt;br&gt;모국어가 필요 없다.”</span></div>
+        <p><span class="lg-jp">道路の上では母国語はいらない。共通言語は、アスファルトを蹴る音である。</span><span class="lg-en">On the road, no native language is needed. Our common language is the sound of feet striking the asphalt.</span><span class="lg-vi">Trên đường, không cần tiếng mẹ đẻ. Ngôn ngữ chung của chúng tôi là tiếng chân đạp lên mặt đường.</span><span class="lg-zh-hans">在路上，不需要母语。共同语言，是双脚蹬踏沥青路面的声音。</span><span class="lg-zh-hant">在路上，不需要母語。共同語言，是雙腳蹬踏柏油路面的聲音。</span><span class="lg-ko">길 위에서는 모국어가 필요 없다. 우리의 공통 언어는 아스팔트를 차는 발소리다.</span></p>
       </div>
     </div>
 
-    <p class="phil-close">An anti-elitist, minimalist athletic collective. Fueled by endurance, grit, and brutal austerity. No expensive gyms. No luxury gear. Just asphalt and relentless distance.</p>
+    <p class="phil-close"><span class="lg-jp">An anti-elitist, minimalist athletic collective. Fueled by endurance, grit, and brutal austerity. No expensive gyms. No luxury gear. Just asphalt and relentless distance.</span><span class="lg-en">An anti-elitist, minimalist athletic collective. Fueled by endurance, grit, and brutal austerity. No expensive gyms. No luxury gear. Just asphalt and relentless distance.</span><span class="lg-vi">Một tập thể thể thao tối giản, chống lại chủ nghĩa tinh hoa. Được tiếp sức bằng sức bền, sự lì lợm và khắc khổ đến tàn nhẫn. Không phòng gym đắt tiền. Không trang bị xa xỉ. Chỉ có mặt đường và quãng đường không ngừng nghỉ.</span><span class="lg-zh-hans">一个反精英、极简的运动集体。以耐力、毅力与严酷的节俭为燃料。没有昂贵的健身房，没有奢侈的装备。只有沥青路面和永不停歇的距离。</span><span class="lg-zh-hant">一個反精英、極簡的運動集體。以耐力、毅力與嚴酷的節儉為燃料。沒有昂貴的健身房，沒有奢侈的裝備。只有柏油路和永不停歇的距離。</span><span class="lg-ko">반엘리트주의의 미니멀한 운동 집단. 지구력과 근성, 그리고 가혹한 절약으로 움직인다. 비싼 짐도 없다. 사치스러운 기어도 없다. 아스팔트와 멈추지 않는 거리뿐이다.</span></p>
 
-    <p class="back-link"><a class="btn ghost" href="index.html">← BACK TO TOP</a></p>
+    <p class="back-link"><a class="btn ghost" href="index.html"><span class="lg-jp">← BACK TO TOP</span><span class="lg-en">← BACK TO TOP</span><span class="lg-vi">← QUAY LẠI ĐẦU TRANG</span><span class="lg-zh-hans">← 返回顶部</span><span class="lg-zh-hant">← 返回頂部</span><span class="lg-ko">← 맨 위로 돌아가기</span></a></p>
   </div>
 </main>
 
@@ -284,6 +342,7 @@
 <script>
 (function(){
   /* Language switch (initial mode was set by the inline script in <head>) */
+  var htmlLangMap = {jp:'ja', en:'en', vi:'vi', 'zh-hans':'zh-Hans', 'zh-hant':'zh-Hant', ko:'ko'};
   var langBtns = Array.prototype.slice.call(document.querySelectorAll('[data-set-lang]'));
   function syncLangBtns(){
     var cur = document.documentElement.getAttribute('data-lang') || 'jp';
@@ -291,15 +350,32 @@
       b.setAttribute('aria-pressed', b.getAttribute('data-set-lang') === cur ? 'true' : 'false');
     });
   }
+  /* Swap alt / aria-label / title from data-* attributes for the active language */
+  function applyLangAttrs(lang){
+    document.querySelectorAll('[data-alt-jp]').forEach(function(el){
+      var v = el.getAttribute('data-alt-' + lang);
+      if (v !== null) el.setAttribute('alt', v);
+    });
+    document.querySelectorAll('[data-aria-jp]').forEach(function(el){
+      var v = el.getAttribute('data-aria-' + lang);
+      if (v !== null) el.setAttribute('aria-label', v);
+    });
+    document.querySelectorAll('[data-title-jp]').forEach(function(el){
+      var v = el.getAttribute('data-title-' + lang);
+      if (v !== null) el.setAttribute('title', v);
+    });
+  }
   langBtns.forEach(function(b){
     b.addEventListener('click', function(){
       var lang = b.getAttribute('data-set-lang');
       document.documentElement.setAttribute('data-lang', lang);
-      document.documentElement.setAttribute('lang', lang === 'jp' ? 'ja' : 'en');
+      document.documentElement.setAttribute('lang', htmlLangMap[lang]);
       try { window.localStorage.setItem('km-lang', lang); } catch (e) {}
+      applyLangAttrs(lang);
       syncLangBtns();
     });
   });
+  applyLangAttrs(document.documentElement.getAttribute('data-lang') || 'jp');
   syncLangBtns();
 })();
 </script>
